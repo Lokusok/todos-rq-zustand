@@ -1,0 +1,33 @@
+*,
+*::before,
+*::after {
+  margin: 0;
+  padding: 0;
+  box-sizing: inherit;
+}
+
+:root {
+  // --accent-color-1: rgba(239 246 246 / 0.6);
+  --accent-color-1: #f9ffff;
+
+  --text-color: #000;
+  --bg-color: #fff;
+}
+
+html {
+  box-sizing: border-box;
+}
+
+body {
+  color: var(--text-color);
+  background: var(--bg-color);
+  font-family: 'Andika', sans-serif;
+}
+
+input,
+textarea,
+button,
+a {
+  font: inherit;
+  color: inherit;
+}

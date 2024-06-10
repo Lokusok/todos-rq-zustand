@@ -1,0 +1,27 @@
+.button {
+  cursor: pointer;
+  appearance: none;
+  background: var(--accent-color-1);
+  border: none;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  border-radius: 10px;
+  padding: 8px 12px;
+  box-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.1);
+  transition: opacity ease 0.1s;
+
+  &:hover {
+    opacity: 0.7;
+  }
+
+  &:active {
+    opacity: 0.4;
+  }
+}
+
+.list {
+  display: flex;
+  column-gap: 15px;
+  list-style: none;
+}
