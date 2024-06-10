@@ -1,6 +1,7 @@
 import Header from '@/components/header';
 import Navigation from '@/components/navigation';
 import ThemeToggler from '@/components/theme-toggler';
+import Tooltip from '@/components/tooltip';
 
 const navItems = [
   {
@@ -22,7 +23,13 @@ const navItems = [
 
 function HeaderWrapper() {
   return (
-    <Header additionalItem={<ThemeToggler />}>
+    <Header
+      additionalItem={
+        <Tooltip title="Переключить тему">
+          <ThemeToggler />
+        </Tooltip>
+      }
+    >
       <Navigation navItems={navItems} />
     </Header>
   );

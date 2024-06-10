@@ -1,4 +1,5 @@
 import { memo } from 'react';
+import { Helmet } from 'react-helmet';
 
 import PageLayout from '@/components/page-layout';
 import Section from '@/components/section';
@@ -12,23 +13,29 @@ import Pagination from '@/components/pagination';
 
 function AllListPage() {
   return (
-    <PageLayout header={<HeaderWrapper />}>
-      <Section.Root>
-        <Section.Title>Список дел:</Section.Title>
-        <Section.Content>
-          <p>Content of list todos here</p>
+    <>
+      <Helmet>
+        <title>Список дел</title>
+      </Helmet>
 
-          <Grid
-            data={store.todos}
-            renderItem={(todo) => <TodoItem todo={todo as TTodo} />}
-            keyExtractor={(todo) => (todo as TTodo).id}
-          />
-        </Section.Content>
-        <Section.Footer centered>
-          <Pagination currentPage={1} maxPage={10} />
-        </Section.Footer>
-      </Section.Root>
-    </PageLayout>
+      <PageLayout header={<HeaderWrapper />}>
+        <Section.Root>
+          <Section.Title>Список дел:</Section.Title>
+          <Section.Content>
+            <p>Content of list todos here</p>
+
+            <Grid
+              data={store.todos}
+              renderItem={(todo) => <TodoItem todo={todo as TTodo} />}
+              keyExtractor={(todo) => (todo as TTodo).id}
+            />
+          </Section.Content>
+          <Section.Footer centered>
+            <Pagination currentPage={1} maxPage={10} />
+          </Section.Footer>
+        </Section.Root>
+      </PageLayout>
+    </>
   );
 }
 

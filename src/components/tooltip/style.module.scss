@@ -1,0 +1,28 @@
+.root {
+  position: relative;
+}
+
+.tooltip {
+  position: absolute;
+  font-size: 10px;
+  background: #ddd;
+  border-radius: 4px;
+  padding: 4px 5px;
+  left: 0;
+  bottom: -25px;
+  pointer-events: none;
+  white-space: nowrap;
+
+  &::before {
+    content: '';
+    position: absolute;
+    left: 4px;
+    top: -8px;
+    width: 0px;
+    height: 0px;
+    border-style: solid;
+    border-width: 0 5px 10px 5px;
+    border-color: transparent transparent #dddddd transparent;
+    transform: rotate(0deg);
+  }
+}

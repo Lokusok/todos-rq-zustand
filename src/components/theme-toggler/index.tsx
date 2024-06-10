@@ -16,7 +16,7 @@ function ThemeToggler() {
   };
 
   return (
-    <button title="Переключить тему" className={style.button} onClick={callbacks.toggleTheme}>
+    <button className={style.button} onClick={callbacks.toggleTheme}>
       <div className={style.inner}>
         <SwitchTransition mode={'out-in'}>
           <CSSTransition unmountOnExit key={theme} timeout={200} classNames="my-node">
