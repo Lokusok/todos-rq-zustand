@@ -11,3 +11,9 @@ export const updateTodo: (todo: TTodo) => Promise<TTodo> = async (todo: TTodo) =
   console.log('Update todo');
   return data;
 };
+
+export const createTodo: (todo: TTodo) => Promise<TTodo> = async (todo: TTodo) => {
+  const { data } = await todosClient.post<TTodo>('/', todo);
+  console.log('Create todo:', data);
+  return data;
+};

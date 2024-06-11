@@ -1,17 +1,16 @@
 import { memo } from 'react';
+import { Helmet } from 'react-helmet';
 
-import CreateTodoForm from '@/components/create-todo-form';
-import Section from '@/components/section';
+import CreateTodoWrapper from '@/containers/create-todo-wrapper';
 
 function CreateTodoPage() {
   return (
-    <Section.Root>
-      <Section.Title>Создание задачи:</Section.Title>
-
-      <Section.Content>
-        <CreateTodoForm />
-      </Section.Content>
-    </Section.Root>
+    <>
+      <Helmet>
+        <title>Создать задачу</title>
+      </Helmet>
+      <CreateTodoWrapper />
+    </>
   );
 }
 
