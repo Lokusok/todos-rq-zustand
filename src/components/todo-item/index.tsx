@@ -12,6 +12,8 @@ import Tooltip from '../tooltip';
 type TProps = {
   todo: TTodo;
   onDrop?: (firstId: TTodo['id'], secondId: TTodo['id']) => void;
+  onComplete?: (id: TTodo['id']) => void;
+  onToggle?: (id: TTodo['id']) => void;
 };
 
 type TTodosTypes = 'completed' | 'in_process' | 'expired';
@@ -28,7 +30,7 @@ const titleTextMap: Record<TTodosTypes, string> = {
   expired: 'Время вышло',
 };
 
-function TodoItem({ todo, onDrop }: TProps) {
+function TodoItem({ todo, onDrop, onComplete, onToggle }: TProps) {
   const [isDraggable, setIsDraggable] = useState(false);
 
   const rootRef = useRef<HTMLDivElement>(null);
@@ -68,6 +70,8 @@ function TodoItem({ todo, onDrop }: TProps) {
   const callbacks = {
     makeDraggable: () => setIsDraggable(true),
     makeUnDraggable: () => setIsDraggable(false),
+    completeTodo: () => onComplete?.(todo.id),
+    toggleTodo: () => onToggle?.(todo.id),
   };
 
   useEffect(() => {
@@ -135,6 +139,7 @@ function TodoItem({ todo, onDrop }: TProps) {
           </Tooltip>
         </div>
         <Button
+          onClick={options.status === 'in_process' ? callbacks.completeTodo : callbacks.toggleTodo}
           status={
             options.status === 'completed'
               ? 'success'

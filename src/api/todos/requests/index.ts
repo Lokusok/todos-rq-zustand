@@ -6,8 +6,8 @@ export const fetchTodos: () => Promise<TTodo[]> = async () => {
   return data;
 };
 
-export const updateTodo = async (todo: TTodo) => {
-  const { data } = await todosClient.put(`/${todo.id}`, todo);
+export const updateTodo: (todo: TTodo) => Promise<TTodo> = async (todo: TTodo) => {
+  const { data } = await todosClient.put<TTodo>(`/${todo.id}`, todo);
   console.log('Update todo');
   return data;
 };

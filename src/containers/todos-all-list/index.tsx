@@ -2,13 +2,11 @@ import { memo } from 'react';
 
 import Skeleton from 'react-loading-skeleton';
 
-import PageLayout from '@/components/page-layout';
 import Section from '@/components/section';
 import TodoItem from '@/components/todo-item';
 import Grid from '@/components/grid';
 import Pagination from '@/components/pagination';
 
-import HeaderWrapper from '@/containers/header-wrapper';
 import useTodos from '@/api/todos/hooks/use-todos';
 import useUpdateTodo from '@/api/todos/hooks/use-update-todo';
 
@@ -19,6 +17,13 @@ function TodosAllList() {
 
   const todosQuery = useTodos();
   const updateTodo = useUpdateTodo();
+  const updateTodoStatus = useUpdateTodo({
+    onSuccess: (data: TTodo) => {
+      queryClient.setQueryData(['todos'], (prevVal: TTodo[]) =>
+        prevVal.map((todo) => (todo.id === data.id ? data : todo))
+      );
+    },
+  });
 
   const callbacks = {
     swapElements: async (firstId: TTodo['id'], secondId: TTodo['id']) => {
@@ -44,34 +49,55 @@ function TodosAllList() {
         queryClient.invalidateQueries({ queryKey: ['todos'] });
       });
     },
+    completeTodo: (id: TTodo['id']) => {
+      if (!todosQuery.data) return;
+
+      const findTodo = todosQuery.data.find((todo) => todo.id === id);
+      if (!findTodo) return;
+
+      findTodo.completed = true;
+      updateTodoStatus.mutateAsync(findTodo).then(() => console.log('end'));
+    },
+    toggleTodo: (id: TTodo['id']) => {
+      if (!todosQuery.data) return;
+
+      const findTodo = todosQuery.data.find((todo) => todo.id === id);
+      if (!findTodo) return;
+
+      findTodo.completed = !findTodo.completed;
+      updateTodoStatus.mutateAsync(findTodo).then(() => console.log('end'));
+    },
   };
 
   return (
     <>
-      <PageLayout header={<HeaderWrapper />}>
-        <Section.Root>
-          <Section.Title>Список дел:</Section.Title>
-          <Section.Content>
-            {todosQuery.isLoading ? (
-              <Grid data={new Array(4).fill(null)} renderItem={() => <Skeleton height={300} />} />
-            ) : (
-              <Grid
-                data={todosQuery.data!.slice().sort((a, b) => a.order - b.order)}
-                renderItem={(todo) => (
-                  <TodoItem onDrop={callbacks.swapElements} todo={todo as TTodo} />
-                )}
-                keyExtractor={(todo) => (todo as TTodo).id}
-              />
-            )}
-          </Section.Content>
-
-          {!todosQuery.isLoading && (
-            <Section.Footer centered>
-              <Pagination currentPage={1} maxPage={10} />
-            </Section.Footer>
+      <Section.Root>
+        <Section.Title>Список дел:</Section.Title>
+        <Section.Content>
+          {todosQuery.isLoading ? (
+            <Grid data={new Array(4).fill(null)} renderItem={() => <Skeleton height={300} />} />
+          ) : (
+            <Grid
+              data={todosQuery.data!.slice().sort((a, b) => a.order - b.order)}
+              renderItem={(todo) => (
+                <TodoItem
+                  onComplete={callbacks.completeTodo}
+                  onToggle={callbacks.toggleTodo}
+                  onDrop={callbacks.swapElements}
+                  todo={todo as TTodo}
+                />
+              )}
+              keyExtractor={(todo) => (todo as TTodo).id}
+            />
           )}
-        </Section.Root>
-      </PageLayout>
+        </Section.Content>
+
+        {!todosQuery.isLoading && (
+          <Section.Footer centered>
+            <Pagination currentPage={1} maxPage={10} />
+          </Section.Footer>
+        )}
+      </Section.Root>
     </>
   );
 }
