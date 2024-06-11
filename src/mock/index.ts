@@ -1,4 +1,4 @@
-export const store = {
+export const store: { todos: TTodo[] } = {
   todos: [
     {
       id: '1',
@@ -8,6 +8,7 @@ export const store = {
       startTime: '2024-06-10T17:16:29.067Z',
       endTime: '2024-06-15T17:16:29.067Z',
       completed: false,
+      order: 1,
     },
     {
       id: '2',
@@ -17,6 +18,7 @@ export const store = {
       startTime: '2024-06-10T17:16:29.067Z',
       endTime: '2024-06-10T17:16:29.067Z',
       completed: true,
+      order: 2,
     },
     {
       id: '3',
@@ -26,6 +28,7 @@ export const store = {
       startTime: '2024-06-10T17:16:29.067Z',
       endTime: '2024-06-10T17:16:29.067Z',
       completed: false,
+      order: 3,
     },
   ],
 };

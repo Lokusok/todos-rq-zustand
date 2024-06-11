@@ -1,6 +1,6 @@
 import style from './style.module.scss';
 
-import { memo } from 'react';
+import { memo, useEffect, useRef, useState } from 'react';
 import { BadgeCheck, Clock, Grip, X } from 'lucide-react';
 
 import clsx from 'clsx';
@@ -11,6 +11,7 @@ import Tooltip from '../tooltip';
 
 type TProps = {
   todo: TTodo;
+  onDrop?: (firstId: TTodo['id'], secondId: TTodo['id']) => void;
 };
 
 type TTodosTypes = 'completed' | 'in_process' | 'expired';
@@ -27,7 +28,11 @@ const titleTextMap: Record<TTodosTypes, string> = {
   expired: 'Время вышло',
 };
 
-function TodoItem({ todo }: TProps) {
+function TodoItem({ todo, onDrop }: TProps) {
+  const [isDraggable, setIsDraggable] = useState(false);
+
+  const rootRef = useRef<HTMLDivElement>(null);
+
   const helpers = {
     formatDate: (date: string) => format(date, 'dd.MM.yyyy'),
   };
@@ -60,10 +65,53 @@ function TodoItem({ todo }: TProps) {
     },
   };
 
+  const callbacks = {
+    makeDraggable: () => setIsDraggable(true),
+    makeUnDraggable: () => setIsDraggable(false),
+  };
+
+  useEffect(() => {
+    const rootNode = rootRef.current;
+    if (!rootNode) return;
+
+    const handleDragStart = (e: DragEvent) => {
+      if (!e.dataTransfer) return;
+      console.log('dragStart');
+      e.dataTransfer.setData('drag_todo_id', todo.id);
+    };
+
+    const handleDragOver = (e: DragEvent) => {
+      e.preventDefault();
+      console.log('dragOver');
+    };
+
+    const handleDrop = (e: DragEvent) => {
+      if (!e.dataTransfer) return;
+
+      const droppedId = e.dataTransfer.getData('drag_todo_id');
+      console.log(`Dropped to ${todo.id} this element: ${droppedId}`);
+      onDrop?.(droppedId, todo.id);
+    };
+
+    rootNode.addEventListener('dragstart', handleDragStart);
+    rootNode.addEventListener('dragover', handleDragOver);
+    rootNode.addEventListener('drop', handleDrop);
+
+    return () => {
+      rootNode.removeEventListener('dragstart', handleDragStart);
+      rootNode.removeEventListener('dragover', handleDragOver);
+      rootNode.removeEventListener('drop', handleDrop);
+    };
+  }, [todo, onDrop]);
+
   return (
-    <article className={style.root}>
+    <article ref={rootRef} draggable={isDraggable} className={style.root}>
       {options.status}
-      <div className={style.indicatorIconWrapper}>
+      <div
+        onPointerEnter={callbacks.makeDraggable}
+        onPointerLeave={callbacks.makeUnDraggable}
+        className={style.indicatorIconWrapper}
+      >
         <Grip size={30} color={'#b1b1b1'} />
       </div>
 
