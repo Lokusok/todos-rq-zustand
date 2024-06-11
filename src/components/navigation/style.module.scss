@@ -29,8 +29,13 @@
     transform: translateY(0);
   }
 
+  &.active {
+    font-weight: bold;
+  }
+
   &.active::before {
     opacity: 1;
     transform: translateY(0);
+    height: 2px;
   }
 }

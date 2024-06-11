@@ -11,6 +11,20 @@
   flex-direction: column;
   row-gap: 4px;
   margin-bottom: 10px;
+
+  &.crossChildren {
+    h1,
+    h2,
+    h3,
+    h4,
+    h5,
+    h6,
+    p,
+    span,
+    a {
+      text-decoration: line-through;
+    }
+  }
 }
 
 .date {
@@ -27,25 +41,6 @@
   display: flex;
   justify-content: space-between;
   align-items: center;
-}
-
-.button {
-  cursor: pointer;
-  appearance: none;
-  border: none;
-  background: #399368;
-  color: #fff;
-  padding: 7.5px 30px;
-  border-radius: 6px;
-  transition: opacity ease 0.1s;
-
-  &:hover {
-    opacity: 0.75;
-  }
-
-  &:active {
-    opacity: 0.4;
-  }
 }
 
 .indicatorIconWrapper {

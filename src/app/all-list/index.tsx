@@ -4,12 +4,12 @@ import { Helmet } from 'react-helmet';
 import PageLayout from '@/components/page-layout';
 import Section from '@/components/section';
 import TodoItem from '@/components/todo-item';
+import Grid from '@/components/grid';
+import Pagination from '@/components/pagination';
 
 import HeaderWrapper from '@/containers/header-wrapper';
 
 import { store } from '@/mock';
-import Grid from '@/components/grid';
-import Pagination from '@/components/pagination';
 
 function AllListPage() {
   return (
@@ -22,8 +22,6 @@ function AllListPage() {
         <Section.Root>
           <Section.Title>Список дел:</Section.Title>
           <Section.Content>
-            <p>Content of list todos here</p>
-
             <Grid
               data={store.todos}
               renderItem={(todo) => <TodoItem todo={todo as TTodo} />}

@@ -1,0 +1,33 @@
+.button {
+  cursor: pointer;
+  appearance: none;
+  border: none;
+  color: #fff;
+  padding: 7.5px 30px;
+  border-radius: 6px;
+  transition: opacity ease 0.1s;
+
+  &:hover {
+    opacity: 0.75;
+  }
+
+  &:active {
+    opacity: 0.4;
+  }
+
+  &.active {
+    background: #399368;
+  }
+
+  &.success {
+    background: #4897f3;
+  }
+
+  &.expired {
+    background: #999;
+  }
+
+  &:disabled {
+    pointer-events: none;
+  }
+}
