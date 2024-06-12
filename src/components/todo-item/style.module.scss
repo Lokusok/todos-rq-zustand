@@ -41,6 +41,7 @@
 .descr {
   font-size: 16px;
   flex-grow: 1;
+  overflow-wrap: anywhere;
 }
 
 .footer {
@@ -66,4 +67,13 @@
   display: flex;
   justify-content: center;
   align-items: center;
+}
+
+.actions {
+  display: flex;
+  column-gap: 10px;
+}
+
+.additionalDots {
+  white-space: nowrap;
 }

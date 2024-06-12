@@ -18,7 +18,7 @@ function ThemeToggler() {
   return (
     <button className={style.button} onClick={callbacks.toggleTheme}>
       <div className={style.inner}>
-        <AnimatePresence mode={'wait'}>
+        <AnimatePresence initial={false} mode={'wait'}>
           {theme === 'dark' ? (
             <motion.div
               key="moonIcon"

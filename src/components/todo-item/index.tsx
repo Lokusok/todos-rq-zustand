@@ -1,19 +1,24 @@
 import style from './style.module.scss';
 
 import { memo, useEffect, useRef, useState } from 'react';
-import { BadgeCheck, Clock, Grip, X } from 'lucide-react';
+import { Archive, BadgeCheck, Clock, Grip, PackageOpen, X } from 'lucide-react';
 
 import clsx from 'clsx';
 import { format } from 'date-fns';
 
 import Button from '../button';
 import Tooltip from '../tooltip';
+import { AnimatePresence, motion } from 'framer-motion';
 
 type TProps = {
   todo: TTodo;
   onDrop?: (firstId: TTodo['id'], secondId: TTodo['id']) => void;
   onComplete?: (id: TTodo['id']) => void;
   onToggle?: (id: TTodo['id']) => void;
+  onArchive?: (id: TTodo['id']) => void;
+  isInArchive?: boolean;
+  isCompleteBtnDisabled?: boolean;
+  completeBtnText?: string;
 };
 
 type TTodosTypes = 'completed' | 'in_process' | 'expired';
@@ -30,7 +35,16 @@ const titleTextMap: Record<TTodosTypes, string> = {
   expired: 'Время вышло',
 };
 
-function TodoItem({ todo, onDrop, onComplete, onToggle }: TProps) {
+function TodoItem({
+  todo,
+  onDrop,
+  onComplete,
+  onToggle,
+  onArchive,
+  isInArchive = false,
+  isCompleteBtnDisabled = false,
+  completeBtnText,
+}: TProps) {
   const [isDraggable, setIsDraggable] = useState(false);
   const [isDragEntered, setIsDragEntered] = useState(false);
 
@@ -40,7 +54,7 @@ function TodoItem({ todo, onDrop, onComplete, onToggle }: TProps) {
     formatDate: (date: string) => format(date, 'dd.MM.yyyy'),
   };
 
-  const options: { status: TTodosTypes } = {
+  const options: { status: TTodosTypes; maxDescrLength: number } = {
     status: (() => {
       if (todo.completed) return 'completed';
 
@@ -53,6 +67,7 @@ function TodoItem({ todo, onDrop, onComplete, onToggle }: TProps) {
 
       return 'in_process';
     })(),
+    maxDescrLength: 150,
   };
 
   const renders = {
@@ -73,6 +88,7 @@ function TodoItem({ todo, onDrop, onComplete, onToggle }: TProps) {
     makeUnDraggable: () => setIsDraggable(false),
     completeTodo: () => onComplete?.(todo.id),
     toggleTodo: () => onToggle?.(todo.id),
+    archiveTodo: () => onArchive?.(todo.id),
   };
 
   useEffect(() => {
@@ -81,12 +97,10 @@ function TodoItem({ todo, onDrop, onComplete, onToggle }: TProps) {
 
     const handleDragStart = (e: DragEvent) => {
       if (!e.dataTransfer) return;
-      console.log('dragstart');
       e.dataTransfer.setData('drag_todo_id', todo.id);
     };
 
     const handleDragEnter = () => {
-      console.log('dragenter');
       if (isDraggable) return;
       setIsDragEntered(true);
     };
@@ -99,34 +113,27 @@ function TodoItem({ todo, onDrop, onComplete, onToggle }: TProps) {
     const handleDrop = (e: DragEvent) => {
       if (!e.dataTransfer) return;
       e.stopPropagation();
+      e.stopImmediatePropagation(); // Чтобы drop может отработать несколько раз
 
       const droppedId = e.dataTransfer.getData('drag_todo_id');
-      console.log(`Dropped to ${todo.id} this element: ${droppedId}`);
       onDrop?.(droppedId, todo.id);
       setIsDragEntered(false);
-    };
-
-    const handleDragLeave = (e: DragEvent) => {
-      console.log('DragLeave', e);
     };
 
     const handleDragOverWindow = () => {
       setIsDragEntered(false);
     };
 
-    window.addEventListener('dragover', handleDragOverWindow);
     rootNode.addEventListener('dragstart', handleDragStart);
     rootNode.addEventListener('dragenter', handleDragEnter);
     rootNode.addEventListener('dragover', handleDragOver);
-    rootNode.addEventListener('dragleave', handleDragLeave);
     rootNode.addEventListener('drop', handleDrop);
+    window.addEventListener('dragover', handleDragOverWindow);
 
     return () => {
       rootNode.removeEventListener('dragstart', handleDragStart);
       rootNode.removeEventListener('dragenter', handleDragEnter);
       rootNode.removeEventListener('dragover', handleDragOver);
-      rootNode.removeEventListener('dragleave', handleDragLeave);
-      rootNode.removeEventListener('drop', handleDrop);
       window.removeEventListener('dragover', handleDragOverWindow);
     };
   }, [todo, onDrop, isDraggable]);
@@ -157,26 +164,124 @@ function TodoItem({ todo, onDrop, onComplete, onToggle }: TProps) {
         </span>
       </header>
 
-      <p className={style.descr}>{todo.descr}</p>
+      <p className={style.descr}>
+        {todo.descr.length > options.maxDescrLength ? (
+          <span>
+            {todo.descr.slice(0, options.maxDescrLength)}{' '}
+            <span className={style.additionalDots}>...</span>
+          </span>
+        ) : (
+          <span>{todo.descr}</span>
+        )}
+      </p>
 
       <footer className={style.footer}>
         <div className={style.statusIconWrapper}>
           <Tooltip title={titleTextMap[options.status]}>
-            {renders.renderIcon(options.status)}
+            {
+              <AnimatePresence initial={false} mode={'popLayout'}>
+                <motion.div
+                  key={options.status}
+                  initial={{ y: -10, opacity: 0 }}
+                  animate={{ y: 0, opacity: 1 }}
+                  exit={{ y: 10, opacity: 0 }}
+                >
+                  {renders.renderIcon(options.status)}
+                </motion.div>
+              </AnimatePresence>
+            }
           </Tooltip>
         </div>
-        <Button
-          onClick={options.status === 'in_process' ? callbacks.completeTodo : callbacks.toggleTodo}
-          status={
-            options.status === 'completed'
-              ? 'success'
-              : options.status === 'expired'
-              ? 'expired'
-              : 'active'
-          }
-        >
-          {actionTextMap[options.status]}
-        </Button>
+
+        <div className={style.actions}>
+          {Boolean(onArchive) && (
+            <AnimatePresence initial={false} mode={'wait'}>
+              {options.status === 'completed' && (
+                <motion.div
+                  initial={{ y: -10, opacity: 0 }}
+                  animate={{ y: 0, opacity: 1 }}
+                  exit={{ y: 10, opacity: 0 }}
+                  key={Number(options.status === 'completed')}
+                >
+                  <AnimatePresence initial={false} mode={'wait'}>
+                    {isInArchive ? (
+                      <motion.div
+                        key="outOfArchiveButton"
+                        initial={{ x: -10, opacity: 0 }}
+                        animate={{ x: 0, opacity: 1 }}
+                        exit={{ x: 3, opacity: 0 }}
+                        transition={{ duration: 0.1 }}
+                      >
+                        <Tooltip title="Из архива">
+                          <Button
+                            onClick={callbacks.archiveTodo}
+                            status="active"
+                            style={{
+                              width: 40,
+                              height: 40,
+                              padding: 0,
+                              display: 'flex',
+                              justifyContent: 'center',
+                              alignItems: 'center',
+                            }}
+                          >
+                            <PackageOpen />
+                          </Button>
+                        </Tooltip>
+                      </motion.div>
+                    ) : (
+                      <motion.div
+                        key="inArchiveButton"
+                        initial={{ x: -10, opacity: 0 }}
+                        animate={{ x: 0, opacity: 1 }}
+                        exit={{ x: 3, opacity: 0 }}
+                        transition={{ duration: 0.1 }}
+                      >
+                        <Tooltip title="В архив">
+                          <Button
+                            onClick={callbacks.archiveTodo}
+                            status="success"
+                            style={{
+                              width: 40,
+                              height: 40,
+                              padding: 0,
+                              display: 'flex',
+                              justifyContent: 'center',
+                              alignItems: 'center',
+                            }}
+                          >
+                            <Archive />
+                          </Button>
+                        </Tooltip>
+                      </motion.div>
+                    )}
+                  </AnimatePresence>
+                </motion.div>
+              )}
+            </AnimatePresence>
+          )}
+
+          {isCompleteBtnDisabled ? (
+            <Button disabled={true} status={'expired'}>
+              {completeBtnText || 'Заблокировано'}
+            </Button>
+          ) : (
+            <Button
+              onClick={
+                options.status === 'in_process' ? callbacks.completeTodo : callbacks.toggleTodo
+              }
+              status={
+                options.status === 'completed'
+                  ? 'success'
+                  : options.status === 'expired'
+                  ? 'expired'
+                  : 'active'
+              }
+            >
+              {actionTextMap[options.status]}
+            </Button>
+          )}
+        </div>
       </footer>
     </article>
   );

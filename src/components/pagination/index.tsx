@@ -6,9 +6,12 @@ import clsx from 'clsx';
 type TProps = {
   currentPage: number;
   maxPage: number;
+  showIfOnlyOne: boolean;
 };
 
-function Pagination({ currentPage, maxPage }: TProps) {
+function Pagination({ currentPage, maxPage, showIfOnlyOne }: TProps) {
+  if (!showIfOnlyOne && maxPage === 1) return <></>;
+
   return (
     <ul className={style.list}>
       {new Array(maxPage).fill(null).map((_, index) => (

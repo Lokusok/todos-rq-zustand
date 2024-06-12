@@ -1,17 +1,21 @@
-import { memo, useEffect } from 'react';
+import { memo } from 'react';
 
 import CreateTodoForm from '@/components/create-todo-form';
-
-import useCreateTodo from '@/api/todos/hooks/use-create-todo';
-
-import { TTodoDto } from './types';
 import Section from '@/components/section';
 
+import useCreateTodo from '@/api/todos/hooks/use-create-todo';
+import useTodos from '@/api/todos/hooks/use-todos';
+
+import { TTodoDto } from './types';
+
 function CreateTodoWrapper() {
+  const todosQuery = useTodos();
   const createTodo = useCreateTodo();
 
   const callbacks = {
     onSubmit: async (todo: TTodoDto) => {
+      if (!todosQuery.data) return;
+
       const buildTodo: TTodo = {
         id: crypto.randomUUID(),
         title: todo.title,
@@ -19,16 +23,11 @@ function CreateTodoWrapper() {
         startTime: new Date().toISOString(),
         endTime: todo.dateEnd,
         completed: false,
-        order: 6,
+        order: todosQuery.data.maxOrder + 1,
       };
       await createTodo.mutateAsync(buildTodo);
-      console.log('Add todo to db');
     },
   };
-
-  useEffect(() => {
-    console.log('isPending:', createTodo.isPending);
-  }, [createTodo.isPending]);
 
   return (
     <>
