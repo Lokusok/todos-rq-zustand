@@ -20,8 +20,6 @@ const useTodos = create<TTodosStore>()(
       todos: store.todos,
       swap: (firstId, secondId) => {
         set((state) => {
-          console.log({ firstId, secondId });
-
           const firstTodo = state.todos.find((todo) => todo.id === firstId);
           if (!firstTodo) return;
 
@@ -29,7 +27,6 @@ const useTodos = create<TTodosStore>()(
           if (!secondTodo) return;
 
           [firstTodo.order, secondTodo.order] = [secondTodo.order, firstTodo.order];
-          console.log(firstTodo.order, secondTodo.order);
         });
       },
     }))

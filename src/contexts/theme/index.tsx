@@ -35,7 +35,6 @@ function ThemeProvider({ children }: TProps) {
   );
 
   useEffect(() => {
-    console.log({ theme });
     switch (theme) {
       case 'dark': {
         document.documentElement.style.setProperty('--text-color', '#fff');

@@ -1,5 +1,5 @@
 import { memo } from 'react';
-import { Helmet } from 'react-helmet';
+import { Helmet } from 'react-helmet-async';
 
 import TodosAllList from '@/containers/todos-all-list';
 

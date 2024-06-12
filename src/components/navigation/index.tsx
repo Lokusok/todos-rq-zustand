@@ -16,7 +16,6 @@ type TProps = {
 };
 
 function Navigation({ navItems }: TProps) {
-  console.log(style);
   const location = useLocation();
 
   return (

@@ -84,6 +84,7 @@ function CreateTodoForm({ onSubmit, submitDisabled }: TProps) {
             minDate={add(new Date(), { days: 1 })}
             placeholderText="До какого числа завершить?"
             className={clsx(style.input, inputStyle.input)}
+            enableTabLoop={false}
             locale="ru"
             name="dateEnd"
             selected={formData.dateEnd ? new Date(formData.dateEnd) : undefined}

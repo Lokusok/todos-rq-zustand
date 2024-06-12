@@ -35,9 +35,6 @@ function TodosAllList() {
       const secondTodo = todosQuery.data.find((todo) => todo.id === secondId);
       if (!secondTodo) return;
 
-      console.log('order of first:', firstTodo.order);
-      console.log('order of second:', secondTodo.order);
-
       [firstTodo.order, secondTodo.order] = [secondTodo.order, firstTodo.order];
 
       const firstTodoUpdatePromise = updateTodo.mutate(firstTodo);
@@ -56,7 +53,7 @@ function TodosAllList() {
       if (!findTodo) return;
 
       findTodo.completed = true;
-      updateTodoStatus.mutateAsync(findTodo).then(() => console.log('end'));
+      updateTodoStatus.mutateAsync(findTodo);
     },
     toggleTodo: (id: TTodo['id']) => {
       if (!todosQuery.data) return;
@@ -65,7 +62,7 @@ function TodosAllList() {
       if (!findTodo) return;
 
       findTodo.completed = !findTodo.completed;
-      updateTodoStatus.mutateAsync(findTodo).then(() => console.log('end'));
+      updateTodoStatus.mutateAsync(findTodo);
     },
   };
 

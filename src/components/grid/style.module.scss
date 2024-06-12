@@ -3,4 +3,12 @@
   grid-template-columns: repeat(2, 1fr);
   column-gap: 105px;
   row-gap: 53px;
+
+  @media (max-width: 757px) {
+    column-gap: 53px;
+  }
+
+  @media (max-width: 657px) {
+    grid-template-columns: 1fr;
+  }
 }

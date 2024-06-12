@@ -32,6 +32,7 @@ const titleTextMap: Record<TTodosTypes, string> = {
 
 function TodoItem({ todo, onDrop, onComplete, onToggle }: TProps) {
   const [isDraggable, setIsDraggable] = useState(false);
+  const [isDragEntered, setIsDragEntered] = useState(false);
 
   const rootRef = useRef<HTMLDivElement>(null);
 
@@ -80,36 +81,62 @@ function TodoItem({ todo, onDrop, onComplete, onToggle }: TProps) {
 
     const handleDragStart = (e: DragEvent) => {
       if (!e.dataTransfer) return;
-      console.log('dragStart');
+      console.log('dragstart');
       e.dataTransfer.setData('drag_todo_id', todo.id);
+    };
+
+    const handleDragEnter = () => {
+      console.log('dragenter');
+      if (isDraggable) return;
+      setIsDragEntered(true);
     };
 
     const handleDragOver = (e: DragEvent) => {
       e.preventDefault();
-      console.log('dragOver');
+      e.stopPropagation();
     };
 
     const handleDrop = (e: DragEvent) => {
       if (!e.dataTransfer) return;
+      e.stopPropagation();
 
       const droppedId = e.dataTransfer.getData('drag_todo_id');
       console.log(`Dropped to ${todo.id} this element: ${droppedId}`);
       onDrop?.(droppedId, todo.id);
+      setIsDragEntered(false);
     };
 
+    const handleDragLeave = (e: DragEvent) => {
+      console.log('DragLeave', e);
+    };
+
+    const handleDragOverWindow = () => {
+      setIsDragEntered(false);
+    };
+
+    window.addEventListener('dragover', handleDragOverWindow);
     rootNode.addEventListener('dragstart', handleDragStart);
+    rootNode.addEventListener('dragenter', handleDragEnter);
     rootNode.addEventListener('dragover', handleDragOver);
+    rootNode.addEventListener('dragleave', handleDragLeave);
     rootNode.addEventListener('drop', handleDrop);
 
     return () => {
       rootNode.removeEventListener('dragstart', handleDragStart);
+      rootNode.removeEventListener('dragenter', handleDragEnter);
       rootNode.removeEventListener('dragover', handleDragOver);
+      rootNode.removeEventListener('dragleave', handleDragLeave);
       rootNode.removeEventListener('drop', handleDrop);
+      window.removeEventListener('dragover', handleDragOverWindow);
     };
-  }, [todo, onDrop]);
+  }, [todo, onDrop, isDraggable]);
 
   return (
-    <article ref={rootRef} draggable={isDraggable} className={style.root}>
+    <article
+      ref={rootRef}
+      draggable={isDraggable}
+      className={clsx(style.root, { [style.blindRoot]: isDragEntered })}
+    >
       {options.status}
       <div
         onPointerEnter={callbacks.makeDraggable}

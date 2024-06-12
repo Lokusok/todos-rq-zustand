@@ -7,7 +7,7 @@
       "startTime": "2024-06-10T17:16:29.067Z",
       "endTime": "2024-06-15T17:16:29.067Z",
       "completed": false,
-      "order": 1
+      "order": 3
     },
     {
       "id": "2",
@@ -34,7 +34,7 @@
       "startTime": "2024-06-11T17:46:27.022Z",
       "endTime": "2024-06-27T21:00:00.000Z",
       "completed": true,
-      "order": 3
+      "order": 1
     }
   ]
 }

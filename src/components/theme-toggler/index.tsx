@@ -2,7 +2,7 @@ import './animations.scss';
 
 import style from './style.module.scss';
 import { memo } from 'react';
-import { CSSTransition, SwitchTransition } from 'react-transition-group';
+import { motion, AnimatePresence } from 'framer-motion';
 
 import { Moon, Sun } from 'lucide-react';
 
@@ -18,11 +18,27 @@ function ThemeToggler() {
   return (
     <button className={style.button} onClick={callbacks.toggleTheme}>
       <div className={style.inner}>
-        <SwitchTransition mode={'out-in'}>
-          <CSSTransition unmountOnExit key={theme} timeout={200} classNames="my-node">
-            {theme === 'dark' ? <Moon size={30} /> : <Sun size={30} />}
-          </CSSTransition>
-        </SwitchTransition>
+        <AnimatePresence mode={'wait'}>
+          {theme === 'dark' ? (
+            <motion.div
+              key="moonIcon"
+              initial={{ y: -10, opacity: 0 }}
+              animate={{ y: 0, opacity: 1 }}
+              exit={{ y: 10, opacity: 0 }}
+            >
+              <Moon size={30} />
+            </motion.div>
+          ) : (
+            <motion.div
+              key="sunIcon"
+              initial={{ y: -10, opacity: 0 }}
+              animate={{ y: 0, opacity: 1 }}
+              exit={{ y: 10, opacity: 0 }}
+            >
+              <Sun size={30} />
+            </motion.div>
+          )}
+        </AnimatePresence>
       </div>
     </button>
   );
