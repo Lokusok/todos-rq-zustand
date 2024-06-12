@@ -6,14 +6,14 @@ import Section from '@/components/section';
 import TodoItem from '@/components/todo-item';
 import Grid from '@/components/grid';
 import Pagination from '@/components/pagination';
+import EmptyBanner from '@/components/empty-banner';
 
-import useTodos from '@/api/todos/hooks/use-todos';
-import useUpdateTodo from '@/api/todos/hooks/use-update-todo';
+import useTodos from '@/api/hooks/use-todos';
+import useUpdateTodo from '@/api/hooks/use-update-todo';
+import useAddTodoToArchive from '@/api/hooks/use-add-todo-to-archive';
+import useRemoveTodoFromArchive from '@/api/hooks/use-remove-todo-from-archive';
 
 import { useQueryClient } from '@tanstack/react-query';
-import EmptyBanner from '@/components/empty-banner';
-import useAddTodoToArchive from '@/api/todos/hooks/use-add-todo-to-archive';
-import useRemoveTodoFromArchive from '@/api/todos/hooks/use-remove-todo-from-archive';
 
 function TodosAllList() {
   const queryClient = useQueryClient();
@@ -24,12 +24,11 @@ function TodosAllList() {
   const addTodoToArchive = useAddTodoToArchive();
   const removeTodoFromArchive = useRemoveTodoFromArchive();
 
-  const todosList: TTodo[] = todosQuery.data ? Object.values(todosQuery.data.list) : [];
+  const todosList = todosQuery.data ? Object.values(todosQuery.data.list) : [];
 
   const helpers = {
     isTodoInArchive: (todoId: TTodo['id']) => {
       const result = Boolean(todosQuery.data?.archive[todoId]);
-      console.log(`${todoId} in archive: ${result}`);
       return result;
     },
   };
@@ -68,11 +67,9 @@ function TodosAllList() {
       updateTodoStatus.mutateAsync(findTodo);
     },
     addTodoToArchive: (id: TTodo['id']) => {
-      console.log('Add to archive: ', id);
       addTodoToArchive.mutate(id);
     },
     removeTodoFromArchive: (id: TTodo['id']) => {
-      console.log('Remove from archive: ', id);
       removeTodoFromArchive.mutate(id);
     },
   };

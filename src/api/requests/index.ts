@@ -1,11 +1,8 @@
 import { STORAGE_KEY } from '..';
 
-import { getInitialSliceState } from '../utils';
+import { saveToLocalStorage, getInitialSliceState } from '@/api/utils';
 
-import { saveToLocalStorage } from '@/api/utils';
-import { TState } from '@/api/types';
-
-import { TTodosSliceState } from '../types';
+import { TState, TTodosSliceState } from '@/api/types';
 
 export const fetchTodos: () => Promise<TTodosSliceState> = async () => {
   const rawState = localStorage.getItem(STORAGE_KEY);
@@ -21,11 +18,6 @@ export const fetchTodos: () => Promise<TTodosSliceState> = async () => {
 export const updateTodo: (todo: TTodo) => Promise<TTodo> = async (todo: TTodo) => {
   const rawState = localStorage.getItem(STORAGE_KEY);
   const state: TState = JSON.parse(rawState!);
-
-  // console.group(todo.id);
-  // console.log('old:', state.todos.list[todo.id]);
-  // console.log('new:', todo);
-  // console.groupEnd(todo.id);
 
   state.todos.list[todo.id] = todo;
 
@@ -55,7 +47,6 @@ export const addTodoToArchive: (todoId: TTodo['id']) => Promise<TTodo> = async (
   const rawState = localStorage.getItem(STORAGE_KEY);
   const state: TState = JSON.parse(rawState!);
 
-  console.log('YES, i am adding it to archive!');
   state.todos.archive[todoId] = true;
 
   saveToLocalStorage(state);

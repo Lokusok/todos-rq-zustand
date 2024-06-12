@@ -18,4 +18,5 @@ function Grid<T>({ data, renderItem, keyExtractor }: TProps<T>) {
   );
 }
 
-export default memo(Grid);
+// memo - функция высшего порядка. TS ломается при её использовании, на место дженерика ставит unknown.
+export default memo(Grid) as typeof Grid;

@@ -51,7 +51,7 @@ function CreateTodoForm({ onSubmit, submitDisabled }: TProps) {
   };
 
   return (
-    <form onSubmit={callbacks.onSubmit} className={style.form}>
+    <form onSubmit={callbacks.onSubmit} className={style.form} autoComplete="off">
       <div className={style.formRow}>
         <label className={style.label}>
           <span className={style.labelText}>Заголовок:</span>
@@ -89,6 +89,7 @@ function CreateTodoForm({ onSubmit, submitDisabled }: TProps) {
             name="dateEnd"
             selected={formData.dateEnd ? new Date(formData.dateEnd) : undefined}
             onChange={(date) => callbacks.handleDateChange(date?.toISOString() || '')}
+            onKeyDown={(e) => e.preventDefault()}
           />
         </label>
       </div>
