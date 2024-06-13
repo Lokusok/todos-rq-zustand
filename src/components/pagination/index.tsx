@@ -7,9 +7,10 @@ type TProps = {
   currentPage: number;
   maxPage: number;
   showIfOnlyOne: boolean;
+  onChange: (page: number) => void;
 };
 
-function Pagination({ currentPage, maxPage, showIfOnlyOne }: TProps) {
+function Pagination({ currentPage, maxPage, showIfOnlyOne, onChange }: TProps) {
   if (!showIfOnlyOne && maxPage === 1) return <></>;
 
   return (
@@ -17,6 +18,7 @@ function Pagination({ currentPage, maxPage, showIfOnlyOne }: TProps) {
       {new Array(maxPage).fill(null).map((_, index) => (
         <li key={index}>
           <button
+            onClick={() => onChange(index + 1)}
             className={clsx(style.button, { [style.buttonActive]: currentPage === index + 1 })}
           >
             {index + 1}

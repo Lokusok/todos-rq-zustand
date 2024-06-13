@@ -12,38 +12,6 @@
   }
 }
 
-.header {
-  display: flex;
-  flex-direction: column;
-  row-gap: 4px;
-  margin-bottom: 10px;
-
-  &.crossChildren {
-    h1,
-    h2,
-    h3,
-    h4,
-    h5,
-    h6,
-    p,
-    span,
-    a {
-      text-decoration: line-through;
-    }
-  }
-}
-
-.date {
-  font-size: 13px;
-  color: #888;
-}
-
-.descr {
-  font-size: 16px;
-  flex-grow: 1;
-  overflow-wrap: anywhere;
-}
-
 .footer {
   margin-top: 20px;
   display: flex;
@@ -61,19 +29,4 @@
   &:active {
     cursor: grabbing;
   }
-}
-
-.statusIconWrapper {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-}
-
-.actions {
-  display: flex;
-  column-gap: 10px;
-}
-
-.additionalDots {
-  white-space: nowrap;
 }

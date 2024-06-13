@@ -4,7 +4,7 @@ import { saveToLocalStorage, getInitialSliceState } from '@/api/utils';
 
 import { TState, TTodosSliceState } from '@/api/types';
 
-export const fetchTodos: () => Promise<TTodosSliceState> = async () => {
+export const fetchTodos: (page: number) => Promise<TTodosSliceState> = async (page = 1) => {
   const rawState = localStorage.getItem(STORAGE_KEY);
   const state: TState = rawState
     ? JSON.parse(rawState)
@@ -12,7 +12,21 @@ export const fetchTodos: () => Promise<TTodosSliceState> = async () => {
         todos: getInitialSliceState(),
       };
 
-  return state.todos;
+  const todosList = Object.fromEntries(
+    Object.entries(state.todos.list).slice(
+      page === 1 ? 0 : (page - 1) * state.todos.perPage,
+      state.todos.perPage * page
+    )
+  );
+  const updatedState: TState = {
+    ...state,
+    todos: {
+      ...state.todos,
+      list: todosList,
+    },
+  };
+
+  return updatedState.todos;
 };
 
 export const updateTodo: (todo: TTodo) => Promise<TTodo> = async (todo: TTodo) => {

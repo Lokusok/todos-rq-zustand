@@ -1,12 +1,12 @@
 import { memo } from 'react';
 
-import Skeleton from 'react-loading-skeleton';
-
 import Section from '@/components/section';
 import TodoItem from '@/components/todo-item';
 import Grid from '@/components/grid';
-import Pagination from '@/components/pagination';
+import GridSkeleton from '@/components/grid/skeleton';
 import EmptyBanner from '@/components/empty-banner';
+
+import PaginationWrapper from '../pagination-wrapper';
 
 import useTodos from '@/api/hooks/use-todos';
 import useUpdateTodo from '@/api/hooks/use-update-todo';
@@ -14,11 +14,14 @@ import useAddTodoToArchive from '@/api/hooks/use-add-todo-to-archive';
 import useRemoveTodoFromArchive from '@/api/hooks/use-remove-todo-from-archive';
 
 import { useQueryClient } from '@tanstack/react-query';
+import { usePaginationStore } from '@/store/pagination';
 
 function TodosAllList() {
+  const paginationStore = usePaginationStore();
+
   const queryClient = useQueryClient();
 
-  const todosQuery = useTodos();
+  const todosQuery = useTodos(paginationStore.currentPage);
   const updateTodo = useUpdateTodo();
   const updateTodoStatus = useUpdateTodo();
   const addTodoToArchive = useAddTodoToArchive();
@@ -83,8 +86,8 @@ function TodosAllList() {
       <Section.Root>
         <Section.Title>Список дел:</Section.Title>
         <Section.Content>
-          {todosQuery.isLoading ? (
-            <Grid data={new Array(4).fill(null)} renderItem={() => <Skeleton height={300} />} />
+          {todosQuery.isFetching ? (
+            <GridSkeleton elemsCount={4} />
           ) : options.isTodosListExists ? (
             <Grid
               data={todosList.slice().sort((a, b) => a.order - b.order)}
@@ -111,11 +114,7 @@ function TodosAllList() {
           )}
         </Section.Content>
 
-        {!todosQuery.isLoading && options.isTodosListExists && (
-          <Section.Footer centered>
-            <Pagination currentPage={1} maxPage={todosQuery.data!.maxPage} showIfOnlyOne={false} />
-          </Section.Footer>
-        )}
+        <PaginationWrapper />
       </Section.Root>
     </>
   );

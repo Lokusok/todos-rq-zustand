@@ -1,0 +1,25 @@
+.header {
+  display: flex;
+  flex-direction: column;
+  row-gap: 4px;
+  margin-bottom: 10px;
+
+  &.crossChildren {
+    h1,
+    h2,
+    h3,
+    h4,
+    h5,
+    h6,
+    p,
+    span,
+    a {
+      text-decoration: line-through;
+    }
+  }
+}
+
+.date {
+  font-size: 13px;
+  color: #888;
+}

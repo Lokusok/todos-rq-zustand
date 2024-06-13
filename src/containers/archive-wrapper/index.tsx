@@ -1,12 +1,12 @@
 import { memo } from 'react';
 import { Link } from 'react-router-dom';
-import Skeleton from 'react-loading-skeleton';
 
 import { AnimatePresence, motion } from 'framer-motion';
 
 import EmptyBanner from '@/components/empty-banner';
 import Section from '@/components/section';
 import Grid from '@/components/grid';
+import GridSkeleton from '@/components/grid/skeleton';
 import TodoItem from '@/components/todo-item';
 import Button from '@/components/button';
 
@@ -22,8 +22,8 @@ function ArchiveWrapper() {
     : [];
 
   const callbacks = {
-    deleteTodo: (todoId: TTodo['id']) => {
-      deleteTodo.mutate(todoId);
+    deleteTodo: async (todoId: TTodo['id']) => {
+      await deleteTodo.mutateAsync(todoId);
     },
   };
 
@@ -36,8 +36,8 @@ function ArchiveWrapper() {
       <Section.Title>Архив:</Section.Title>
 
       <Section.Content>
-        {todosQuery.isLoading ? (
-          <Grid data={new Array(4).fill(null)} renderItem={() => <Skeleton height={300} />} />
+        {todosQuery.isFetching ? (
+          <GridSkeleton elemsCount={4} />
         ) : options.isTodosListExists ? (
           <AnimatePresence>
             <Grid

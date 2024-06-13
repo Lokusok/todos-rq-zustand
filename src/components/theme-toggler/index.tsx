@@ -1,6 +1,5 @@
-import './animations.scss';
-
 import style from './style.module.scss';
+
 import { memo } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 

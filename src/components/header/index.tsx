@@ -13,8 +13,14 @@ function Header({ children, additionalItem }: TProps) {
   useEffect(() => {
     if (!childrenDivRef.current || !centeredDivRef.current) return;
 
-    centeredDivRef.current.style.width =
-      childrenDivRef.current.getBoundingClientRect().width + 130 + 'px';
+    requestAnimationFrame(() => {
+      if (!childrenDivRef.current || !centeredDivRef.current) return;
+      centeredDivRef.current.style.width =
+        childrenDivRef.current.getBoundingClientRect().width +
+        centeredDivRef.current.getBoundingClientRect().width / 10 +
+        130 +
+        'px';
+    });
   }, []);
 
   return (

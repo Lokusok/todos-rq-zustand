@@ -3,6 +3,8 @@ import Navigation from '@/components/navigation';
 import ThemeToggler from '@/components/theme-toggler';
 import Tooltip from '@/components/tooltip';
 
+import OptionsToggler from '../options-toggler';
+
 const navItems = [
   {
     key: 'list_todos',
@@ -25,9 +27,15 @@ function HeaderWrapper() {
   return (
     <Header
       additionalItem={
-        <Tooltip title="Переключить тему">
-          <ThemeToggler />
-        </Tooltip>
+        <div style={{ display: 'flex', columnGap: '25px' }}>
+          <Tooltip title="Настройки">
+            <OptionsToggler />
+          </Tooltip>
+
+          <Tooltip title="Переключить тему">
+            <ThemeToggler />
+          </Tooltip>
+        </div>
       }
     >
       <Navigation navItems={navItems} />

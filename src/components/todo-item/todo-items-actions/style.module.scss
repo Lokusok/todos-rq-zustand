@@ -1,0 +1,22 @@
+.indicatorIconWrapper {
+  position: absolute;
+  right: 5px;
+  top: 5px;
+  cursor: grab;
+  padding: 10px;
+
+  &:active {
+    cursor: grabbing;
+  }
+}
+
+.statusIconWrapper {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.actions {
+  display: flex;
+  column-gap: 10px;
+}
