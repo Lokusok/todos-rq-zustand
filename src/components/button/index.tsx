@@ -6,7 +6,7 @@ import clsx from 'clsx';
 
 type TProps = {
   children: React.ReactNode;
-  status?: 'active' | 'success' | 'expired';
+  status?: 'active' | 'success' | 'expired' | 'danger';
 } & React.ComponentProps<'button'>;
 
 function Button({ children, status = 'active', ...props }: TProps) {
@@ -16,6 +16,7 @@ function Button({ children, status = 'active', ...props }: TProps) {
         [style.active]: status === 'active',
         [style.success]: status === 'success',
         [style.expired]: status === 'expired',
+        [style.danger]: status === 'danger',
       })}
       disabled={status === 'expired'}
       {...props}

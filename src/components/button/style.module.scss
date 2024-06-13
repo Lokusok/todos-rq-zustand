@@ -27,6 +27,10 @@
     background: #999;
   }
 
+  &.danger {
+    background: #c53030;
+  }
+
   &:disabled {
     pointer-events: none;
     opacity: 0.4;

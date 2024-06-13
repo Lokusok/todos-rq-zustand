@@ -1,14 +1,16 @@
 import style from './style.module.scss';
 
-import { memo, useEffect, useRef, useState } from 'react';
-import { Archive, BadgeCheck, Clock, Grip, PackageOpen, X } from 'lucide-react';
+import { memo, useRef, useState } from 'react';
+import { Archive, BadgeCheck, Clock, Grip, PackageOpen, Trash2, X } from 'lucide-react';
+import { AnimatePresence, motion } from 'framer-motion';
 
 import clsx from 'clsx';
 import { format } from 'date-fns';
 
 import Button from '../button';
 import Tooltip from '../tooltip';
-import { AnimatePresence, motion } from 'framer-motion';
+
+import useMakeDroppable from './hooks/use-make-droppable';
 
 type TProps = {
   todo: TTodo;
@@ -19,6 +21,7 @@ type TProps = {
   isInArchive?: boolean;
   isCompleteBtnDisabled?: boolean;
   completeBtnText?: string;
+  onDelete?: (id: TTodo['id']) => void;
 };
 
 type TTodosTypes = 'completed' | 'in_process' | 'expired';
@@ -44,6 +47,7 @@ function TodoItem({
   isInArchive = false,
   isCompleteBtnDisabled = false,
   completeBtnText,
+  onDelete,
 }: TProps) {
   const [isDraggable, setIsDraggable] = useState(false);
   const [isDragEntered, setIsDragEntered] = useState(false);
@@ -89,54 +93,15 @@ function TodoItem({
     completeTodo: () => onComplete?.(todo.id),
     toggleTodo: () => onToggle?.(todo.id),
     archiveTodo: () => onArchive?.(todo.id),
+    deleteTodo: () => onDelete?.(todo.id),
   };
 
-  useEffect(() => {
-    const rootNode = rootRef.current;
-    if (!rootNode) return;
-
-    const handleDragStart = (e: DragEvent) => {
-      if (!e.dataTransfer) return;
-      e.dataTransfer.setData('drag_todo_id', todo.id);
-    };
-
-    const handleDragEnter = () => {
-      if (isDraggable) return;
-      setIsDragEntered(true);
-    };
-
-    const handleDragOver = (e: DragEvent) => {
-      e.preventDefault();
-      e.stopPropagation();
-    };
-
-    const handleDrop = (e: DragEvent) => {
-      if (!e.dataTransfer) return;
-      e.stopPropagation();
-      e.stopImmediatePropagation(); // Чтобы drop может отработать несколько раз
-
-      const droppedId = e.dataTransfer.getData('drag_todo_id');
-      onDrop?.(droppedId, todo.id);
-      setIsDragEntered(false);
-    };
-
-    const handleDragOverWindow = () => {
-      setIsDragEntered(false);
-    };
-
-    rootNode.addEventListener('dragstart', handleDragStart);
-    rootNode.addEventListener('dragenter', handleDragEnter);
-    rootNode.addEventListener('dragover', handleDragOver);
-    rootNode.addEventListener('drop', handleDrop);
-    window.addEventListener('dragover', handleDragOverWindow);
-
-    return () => {
-      rootNode.removeEventListener('dragstart', handleDragStart);
-      rootNode.removeEventListener('dragenter', handleDragEnter);
-      rootNode.removeEventListener('dragover', handleDragOver);
-      window.removeEventListener('dragover', handleDragOverWindow);
-    };
-  }, [todo, onDrop, isDraggable]);
+  useMakeDroppable(rootRef, {
+    isDraggable,
+    setIsDragEntered,
+    todo,
+    onDrop,
+  });
 
   return (
     <article
@@ -262,9 +227,29 @@ function TodoItem({
           )}
 
           {isCompleteBtnDisabled ? (
-            <Button disabled={true} status={'expired'}>
-              {completeBtnText || 'Заблокировано'}
-            </Button>
+            <>
+              {Boolean(onDelete) && (
+                <Tooltip title="Удалить">
+                  <Button
+                    onClick={callbacks.deleteTodo}
+                    status="danger"
+                    style={{
+                      width: 40,
+                      height: 40,
+                      padding: 0,
+                      display: 'flex',
+                      justifyContent: 'center',
+                      alignItems: 'center',
+                    }}
+                  >
+                    <Trash2 />
+                  </Button>
+                </Tooltip>
+              )}
+              <Button disabled={true} status={'expired'}>
+                {completeBtnText || 'Заблокировано'}
+              </Button>
+            </>
           ) : (
             <Button
               onClick={
