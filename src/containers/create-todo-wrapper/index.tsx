@@ -6,7 +6,7 @@ import Section from '@/components/section';
 import useCreateTodo from '@/api/hooks/use-create-todo';
 import useTodos from '@/api/hooks/use-todos';
 
-import { useToastsStore } from '@/store/toasts';
+import { useToastsStore } from '@/store';
 import { useShallow } from 'zustand/react/shallow';
 
 import { TTodoDto } from './types';

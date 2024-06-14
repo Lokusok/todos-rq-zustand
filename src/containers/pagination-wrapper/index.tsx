@@ -4,7 +4,7 @@ import Pagination from '@/components/pagination';
 import Section from '@/components/section';
 
 import useTodos from '@/api/hooks/use-todos';
-import { usePaginationStore } from '@/store/pagination';
+import { usePaginationStore } from '@/store';
 
 function PaginationWrapper() {
   const paginationStore = usePaginationStore();

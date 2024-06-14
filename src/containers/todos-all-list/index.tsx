@@ -14,7 +14,7 @@ import useAddTodoToArchive from '@/api/hooks/use-add-todo-to-archive';
 import useRemoveTodoFromArchive from '@/api/hooks/use-remove-todo-from-archive';
 
 import { useQueryClient } from '@tanstack/react-query';
-import { usePaginationStore } from '@/store/pagination';
+import { usePaginationStore } from '@/store';
 
 function TodosAllList() {
   const paginationStore = usePaginationStore();

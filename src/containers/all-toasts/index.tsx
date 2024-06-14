@@ -4,7 +4,7 @@ import { AnimatePresence, motion } from 'framer-motion';
 
 import Toast from '@/components/toast';
 
-import { useToastsStore } from '@/store/toasts';
+import { useToastsStore } from '@/store';
 import { TToast } from '@/store/toasts/types';
 
 function AllToasts() {
