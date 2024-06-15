@@ -14,3 +14,7 @@ export const getInitialSliceState: () => TTodosSliceState = () => {
 export const saveToLocalStorage = (state: TState) => {
   localStorage.setItem(STORAGE_KEY, JSON.stringify(state));
 };
+
+export const calculateMaxPage = (length: number, perPage: number) => {
+  return Math.ceil(length / perPage);
+};

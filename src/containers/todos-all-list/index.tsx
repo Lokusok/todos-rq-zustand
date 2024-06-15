@@ -29,7 +29,10 @@ function TodosAllList() {
 
   const queryClient = useQueryClient();
 
-  const todosQuery = useTodos(paginationStore.currentPage);
+  const todosQuery = useTodos({
+    page: paginationStore.currentPage,
+    excludeArchive: !listSettingsStore.showArchived,
+  });
   const updateTodo = useUpdateTodo();
   const updateTodoStatus = useUpdateTodo();
   const addTodoToArchive = useAddTodoToArchive();

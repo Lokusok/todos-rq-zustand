@@ -5,11 +5,16 @@ import Section from '@/components/section';
 
 import useTodos from '@/api/hooks/use-todos';
 import { usePaginationStore } from '@/store';
+import { useListSettingsStore } from '@/store/list-settings';
 
 function PaginationWrapper() {
   const paginationStore = usePaginationStore();
+  const listSettingsStore = useListSettingsStore();
 
-  const todosQuery = useTodos(paginationStore.currentPage);
+  const todosQuery = useTodos({
+    page: paginationStore.currentPage,
+    excludeArchive: !listSettingsStore.showArchived,
+  });
 
   if (!todosQuery.data) return;
   paginationStore.setMaxPage(todosQuery.data.maxPage);

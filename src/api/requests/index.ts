@@ -1,10 +1,15 @@
 import { STORAGE_KEY } from '..';
 
-import { saveToLocalStorage, getInitialSliceState } from '@/api/utils';
+import { saveToLocalStorage, getInitialSliceState, calculateMaxPage } from '@/api/utils';
 
 import { TState, TTodosSliceState } from '@/api/types';
 
-export const fetchTodos: (page: number) => Promise<TTodosSliceState> = async (page = 1) => {
+import { TOptions } from './types';
+
+export const fetchTodos: (options: TOptions) => Promise<TTodosSliceState> = async ({
+  page = -1,
+  excludeArchive,
+}) => {
   const rawState = localStorage.getItem(STORAGE_KEY);
   const state: TState = rawState
     ? JSON.parse(rawState)
@@ -12,12 +17,25 @@ export const fetchTodos: (page: number) => Promise<TTodosSliceState> = async (pa
         todos: getInitialSliceState(),
       };
 
-  const todosList = Object.fromEntries(
-    Object.entries(state.todos.list).slice(
+  let todosList = state.todos.list;
+
+  if (page !== -1) {
+    let todosExecutionList = Object.entries(state.todos.list);
+
+    if (excludeArchive) {
+      todosExecutionList = todosExecutionList.filter(([todoId]) => !state.todos.archive[todoId]);
+
+      state.todos.maxPage = calculateMaxPage(todosExecutionList.length, state.todos.perPage);
+    }
+
+    todosExecutionList = todosExecutionList.slice(
       page === 1 ? 0 : (page - 1) * state.todos.perPage,
       state.todos.perPage * page
-    )
-  );
+    );
+
+    todosList = Object.fromEntries(todosExecutionList);
+  }
+
   const updatedState: TState = {
     ...state,
     todos: {
@@ -50,7 +68,10 @@ export const createTodo: (todo: TTodo) => Promise<TTodo> = async (todo: TTodo) =
 
   state.todos.list[todo.id] = todo;
   state.todos.maxOrder = todo.order;
-  state.todos.maxPage = Math.ceil(Object.values(state.todos.list).length / state.todos.perPage);
+  state.todos.maxPage = calculateMaxPage(
+    Object.values(state.todos.list).length,
+    state.todos.perPage
+  );
 
   saveToLocalStorage(state);
 

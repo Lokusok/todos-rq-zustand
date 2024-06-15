@@ -1,10 +1,12 @@
 import { useQuery } from '@tanstack/react-query';
 import { fetchTodos } from '../../requests';
 
-function useTodos(page?: number) {
+import { TOptions } from '@/api/requests/types';
+
+function useTodos(options?: TOptions) {
   return useQuery({
-    queryKey: ['todos', page],
-    queryFn: () => fetchTodos(page || 1),
+    queryKey: ['todos', options],
+    queryFn: () => fetchTodos(options || {}),
   });
 }
 

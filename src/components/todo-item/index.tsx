@@ -15,6 +15,7 @@ import useMakeDroppable from './hooks/use-make-droppable';
 
 import { TTodosTypes } from './types';
 import TodoItemsActions from './todo-items-actions';
+import getTodoStatus from '@/utils/get-todo-status';
 
 type TProps = {
   todo: TTodo;
@@ -57,18 +58,7 @@ function TodoItem({
   const rootRef = useRef<HTMLDivElement>(null);
 
   const options: { status: TTodosTypes; maxDescrLength: number } = {
-    status: (() => {
-      if (todo.completed) return 'completed';
-
-      const dateNow = new Date();
-      const dateEnd = new Date(todo.endTime);
-
-      if (dateNow > dateEnd) {
-        return 'expired';
-      }
-
-      return 'in_process';
-    })(),
+    status: getTodoStatus(todo),
     maxDescrLength: 70,
   };
 
