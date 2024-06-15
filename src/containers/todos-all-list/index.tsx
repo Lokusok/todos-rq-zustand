@@ -1,6 +1,8 @@
 import { memo } from 'react';
 import { useTranslation } from 'react-i18next';
 
+import { AnimatePresence, motion } from 'framer-motion';
+
 import Section from '@/components/section';
 import TodoItem from '@/components/todo-item';
 import Grid from '@/components/grid';
@@ -9,34 +11,41 @@ import EmptyBanner from '@/components/empty-banner';
 
 import PaginationWrapper from '../pagination-wrapper';
 
-import useTodos from '@/api/hooks/use-todos';
+import useTodosByCurrentPageSyncArchived from '@/hooks/external/use-todos-by-current-page-sync-archived';
+
 import useUpdateTodo from '@/api/hooks/use-update-todo';
 import useAddTodoToArchive from '@/api/hooks/use-add-todo-to-archive';
 import useRemoveTodoFromArchive from '@/api/hooks/use-remove-todo-from-archive';
 import useDeleteTodo from '@/api/hooks/use-delete-todo';
 
 import { useQueryClient } from '@tanstack/react-query';
-import { usePaginationStore } from '@/store';
 import { useListSettingsStore } from '@/store/list-settings';
 import { useShallow } from 'zustand/react/shallow';
+import { usePaginationStore } from '@/store';
 
 function TodosAllList() {
-  const paginationStore = usePaginationStore();
   const listSettingsStore = useListSettingsStore(
     useShallow((state) => ({
       showArchived: state.showArchived,
     }))
   );
+  const paginationStore = usePaginationStore(
+    useShallow((state) => ({
+      currentPage: state.currentPage,
+    }))
+  );
+  const queryOptionsExternal = {
+    page: paginationStore.currentPage,
+    excludeArchive: !listSettingsStore.showArchived,
+  };
 
   const queryClient = useQueryClient();
 
-  const todosQuery = useTodos({
-    page: paginationStore.currentPage,
-    excludeArchive: !listSettingsStore.showArchived,
-  });
+  const todosQuery = useTodosByCurrentPageSyncArchived();
+
   const updateTodo = useUpdateTodo();
   const updateTodoStatus = useUpdateTodo();
-  const addTodoToArchive = useAddTodoToArchive();
+  const addTodoToArchive = useAddTodoToArchive(queryOptionsExternal);
   const removeTodoFromArchive = useRemoveTodoFromArchive();
   const deleteTodo = useDeleteTodo();
 
@@ -67,13 +76,29 @@ function TodosAllList() {
 
       [firstTodo.order, secondTodo.order] = [secondTodo.order, firstTodo.order];
 
-      const firstTodoUpdatePromise = updateTodo.mutate(firstTodo);
-      const secondTodoUpdatePromise = updateTodo.mutate(secondTodo);
+      const firstTodoUpdatePromise = updateTodo.mutateAsync(firstTodo);
+      const secondTodoUpdatePromise = updateTodo.mutateAsync(secondTodo);
 
       await Promise.allSettled([firstTodoUpdatePromise, secondTodoUpdatePromise]);
 
       requestIdleCallback(() => {
-        queryClient.invalidateQueries({ queryKey: ['todos'] });
+        queryClient.setQueryData(['todos', queryOptionsExternal], (state: any) => {
+          console.log(state);
+
+          const newState = {
+            ...state,
+            list: Object.fromEntries(
+              Object.entries(state.list).map(([id, todo]) => {
+                if (id === firstTodo.id) return [secondTodo.id, secondTodo];
+                else if (id === secondTodo.id) return [firstTodo.id, firstTodo];
+
+                return [id, todo];
+              })
+            ),
+          };
+
+          return newState;
+        });
       });
     },
     completeTodo: (id: TTodo['id']) => {
@@ -112,34 +137,59 @@ function TodosAllList() {
       <Section.Root>
         <Section.Title>{t('listTasksTitle')}:</Section.Title>
         <Section.Content>
-          {todosQuery.isFetching ? (
-            <GridSkeleton elemsCount={4} />
-          ) : options.isTodosListExists ? (
-            <Grid
-              data={todosList}
-              renderItem={(todo: TTodo) => {
-                const isTodoInArchive = helpers.isTodoInArchive(todo.id);
+          <AnimatePresence mode="popLayout">
+            {todosQuery.isFetching ? (
+              <motion.div
+                key={'skeletons'}
+                initial={{ opacity: 0 }}
+                animate={{ opacity: 1 }}
+                exit={{ opacity: 0 }}
+              >
+                <GridSkeleton elemsCount={4} />
+              </motion.div>
+            ) : options.isTodosListExists ? (
+              <motion.div
+                key={'nature_elements'}
+                initial={{ opacity: 0 }}
+                animate={{ opacity: 1 }}
+                exit={{ opacity: 0 }}
+              >
+                <Grid
+                  data={todosList}
+                  renderItem={(todo: TTodo) => {
+                    const isTodoInArchive = helpers.isTodoInArchive(todo.id);
 
-                return (
-                  <TodoItem
-                    t={t}
-                    onArchive={
-                      isTodoInArchive ? callbacks.removeTodoFromArchive : callbacks.addTodoToArchive
-                    }
-                    isInArchive={isTodoInArchive}
-                    onComplete={callbacks.completeTodo}
-                    onToggle={callbacks.toggleTodo}
-                    onDelete={callbacks.deleteTodo}
-                    onDrop={callbacks.swapElements}
-                    todo={todo as TTodo}
-                  />
-                );
-              }}
-              keyExtractor={(todo) => (todo as TTodo).id}
-            />
-          ) : (
-            <EmptyBanner t={t} goToHref="/create_todo" />
-          )}
+                    return (
+                      <TodoItem
+                        t={t}
+                        onArchive={
+                          isTodoInArchive
+                            ? callbacks.removeTodoFromArchive
+                            : callbacks.addTodoToArchive
+                        }
+                        isInArchive={isTodoInArchive}
+                        onComplete={callbacks.completeTodo}
+                        onToggle={callbacks.toggleTodo}
+                        onDelete={callbacks.deleteTodo}
+                        onDrop={callbacks.swapElements}
+                        todo={todo as TTodo}
+                      />
+                    );
+                  }}
+                  keyExtractor={(todo) => (todo as TTodo).id}
+                />
+              </motion.div>
+            ) : (
+              <motion.div
+                key={'empty_banner'}
+                initial={{ opacity: 0 }}
+                animate={{ opacity: 1 }}
+                exit={{ opacity: 0 }}
+              >
+                <EmptyBanner t={t} goToHref="/create_todo" />
+              </motion.div>
+            )}
+          </AnimatePresence>
         </Section.Content>
 
         <PaginationWrapper />

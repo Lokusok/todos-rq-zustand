@@ -22,6 +22,8 @@
 
 .buttonActive {
   background: #d0f2f2;
+  cursor: default;
+  pointer-events: none;
 }
 
 .list {

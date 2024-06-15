@@ -11,19 +11,12 @@ import GridSkeleton from '@/components/grid/skeleton';
 import TodoItem from '@/components/todo-item';
 import Button from '@/components/button';
 
-import useTodos from '@/api/hooks/use-todos';
 import useDeleteTodo from '@/api/hooks/use-delete-todo';
+import useArchivedTodos from '@/api/hooks/use-archived-todos';
 
 function ArchiveWrapper() {
-  const todosQuery = useTodos();
+  const todosQuery = useArchivedTodos();
   const deleteTodo = useDeleteTodo();
-
-  const todosList: TTodo[] = todosQuery.data
-    ? Object.keys(todosQuery.data.archive)
-        .map((todoId) => todosQuery.data.list[todoId])
-        .slice()
-        .sort((a, b) => a.order - b.order)
-    : [];
 
   const callbacks = {
     deleteTodo: async (todoId: TTodo['id']) => {
@@ -32,7 +25,7 @@ function ArchiveWrapper() {
   };
 
   const options = {
-    isTodosListExists: Number(todosList.length) > 0,
+    isTodosListExists: Number(todosQuery.data?.length) > 0,
   };
 
   const { t } = useTranslation();
@@ -47,7 +40,7 @@ function ArchiveWrapper() {
         ) : options.isTodosListExists ? (
           <AnimatePresence>
             <Grid
-              data={todosList}
+              data={todosQuery.data!}
               renderItem={(todo) => {
                 return (
                   <motion.div exit={{ opacity: 0, y: 10 }}>
@@ -69,7 +62,7 @@ function ArchiveWrapper() {
             t={t}
             leftActions={
               <>
-                {Object.values(todosQuery.data?.list || {}).length > 0 && (
+                {Object.values(todosQuery.data!).length > 0 && (
                   <Link to="/">
                     <Button status="active">{t('anyActions.archiveEntity1')}</Button>
                   </Link>

@@ -101,13 +101,15 @@ function TodoItem({
       draggable={isDraggable}
       className={clsx(style.root, { [style.blindRoot]: isDragEntered })}
     >
-      <div
-        onPointerEnter={callbacks.makeDraggable}
-        onPointerLeave={callbacks.makeUnDraggable}
-        className={style.indicatorIconWrapper}
-      >
-        <Grip size={30} color={'#b1b1b1'} />
-      </div>
+      {Boolean(onDrop) && (
+        <div
+          onPointerEnter={callbacks.makeDraggable}
+          onPointerLeave={callbacks.makeUnDraggable}
+          className={style.indicatorIconWrapper}
+        >
+          <Grip size={30} color={'#b1b1b1'} />
+        </div>
+      )}
 
       <TodoItemHeader status={options.status} todo={todo} />
       <TodoItemsDescr todo={todo} maxLength={options.maxDescrLength} />

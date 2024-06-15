@@ -37,15 +37,15 @@ function ThemeProvider({ children }: TProps) {
   useEffect(() => {
     switch (theme) {
       case 'dark': {
-        document.documentElement.style.setProperty('--text-color', '#fff');
-        document.documentElement.style.setProperty('--bg-color', '#000');
-        document.documentElement.style.setProperty('--accent-color-1', '#6370e5');
+        document.documentElement.style.setProperty('--text-color', '#fbfbfb');
+        document.documentElement.style.setProperty('--bg-color', '#121212');
+        document.documentElement.style.setProperty('--accent-color-1', '#535353');
         break;
       }
 
       case 'light': {
-        document.documentElement.style.setProperty('--text-color', '#000');
-        document.documentElement.style.setProperty('--bg-color', '#fff');
+        document.documentElement.style.setProperty('--text-color', '#121212');
+        document.documentElement.style.setProperty('--bg-color', '#fbfbfb');
         document.documentElement.style.setProperty('--accent-color-1', '#f9ffff');
         break;
       }

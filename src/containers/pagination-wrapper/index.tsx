@@ -1,28 +1,26 @@
-import { memo } from 'react';
+import { memo, useEffect } from 'react';
 
 import Pagination from '@/components/pagination';
 import Section from '@/components/section';
 
-import useTodos from '@/api/hooks/use-todos';
 import { usePaginationStore } from '@/store';
-import { useListSettingsStore } from '@/store/list-settings';
+
+import useTodosByCurrentPageSyncArchived from '@/hooks/external/use-todos-by-current-page-sync-archived';
 
 function PaginationWrapper() {
   const paginationStore = usePaginationStore();
-  const listSettingsStore = useListSettingsStore();
 
-  const todosQuery = useTodos({
-    page: paginationStore.currentPage,
-    excludeArchive: !listSettingsStore.showArchived,
-  });
+  const todosQuery = useTodosByCurrentPageSyncArchived();
 
-  if (!todosQuery.data) return;
-  paginationStore.setMaxPage(todosQuery.data.maxPage);
+  useEffect(() => {
+    if (!todosQuery.data) return;
+    paginationStore.setMaxPage(todosQuery.data.maxPage);
 
-  if (Object.values(todosQuery.data.list).length === 0) {
-    paginationStore.setCurrentPage(1);
-    return null;
-  }
+    if (Object.values(todosQuery.data.list).length === 0) {
+      paginationStore.setCurrentPage(1);
+      return;
+    }
+  }, [todosQuery.data, paginationStore]);
 
   return (
     <>

@@ -12,7 +12,7 @@ type TProps<T> = {
 function Grid<T>({ data, renderItem, keyExtractor }: TProps<T>) {
   return (
     <div className={style.grid}>
-      <AnimatePresence initial={false}>
+      <AnimatePresence initial={false} mode={'popLayout'}>
         {data.map((item, index) => (
           <motion.div
             initial={{ opacity: 0 }}

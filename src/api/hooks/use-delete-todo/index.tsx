@@ -8,6 +8,10 @@ function useDeleteTodo() {
     mutationFn: deleteTodo,
     onSettled: () => {
       queryClient.invalidateQueries({
+        queryKey: ['archivedTodos'],
+      });
+
+      queryClient.invalidateQueries({
         queryKey: ['todos'],
       });
     },

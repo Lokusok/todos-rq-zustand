@@ -1,14 +1,21 @@
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { addTodoToArchive } from '../../requests';
 
-function useAddTodoToArchive() {
+import { getAllTodosFromLocalStorage } from '@/api/utils';
+import { TOptions } from '@/api/requests/types';
+
+function useAddTodoToArchive(options: TOptions) {
   const queryClient = useQueryClient();
 
   return useMutation({
     mutationFn: addTodoToArchive,
-    onSettled: () => {
+    onSettled: async () => {
+      queryClient.setQueryData(['todos', options], () => {
+        return getAllTodosFromLocalStorage(options);
+      });
+
       queryClient.invalidateQueries({
-        queryKey: ['todos'],
+        queryKey: ['archivedTodos'],
       });
     },
   });
