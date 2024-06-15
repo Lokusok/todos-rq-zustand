@@ -15,6 +15,7 @@ type TProps = {
   status: TTodosTypes;
   isDeleteBtnVisible?: boolean;
   isInArchive?: boolean;
+  isArchiveBtnVisible?: boolean;
   completeBtnText?: string;
   isCompleteBtnDisabled?: boolean;
   mainButtonText: string;
@@ -29,11 +30,12 @@ function TodoItemActions({
   completeBtnText,
   isCompleteBtnDisabled = false,
   isDeleteBtnVisible = false,
+  isArchiveBtnVisible = false,
   mainButtonText,
 }: TProps) {
   return (
     <div className={style.actions}>
-      {Boolean(onArchive) && (
+      {isArchiveBtnVisible && (
         <AnimatePresence initial={false} mode={'wait'}>
           {status === 'completed' && (
             <motion.div
@@ -69,30 +71,34 @@ function TodoItemActions({
                     </Tooltip>
                   </motion.div>
                 ) : (
-                  <motion.div
-                    key="inArchiveButton"
-                    initial={{ x: -10, opacity: 0 }}
-                    animate={{ x: 0, opacity: 1 }}
-                    exit={{ x: 3, opacity: 0 }}
-                    transition={{ duration: 0.1 }}
-                  >
-                    <Tooltip title="В архив">
-                      <Button
-                        onClick={onArchive}
-                        status="success"
-                        style={{
-                          width: 40,
-                          height: 40,
-                          padding: 0,
-                          display: 'flex',
-                          justifyContent: 'center',
-                          alignItems: 'center',
-                        }}
+                  <>
+                    {Boolean(onArchive) && (
+                      <motion.div
+                        key="inArchiveButton"
+                        initial={{ x: -10, opacity: 0 }}
+                        animate={{ x: 0, opacity: 1 }}
+                        exit={{ x: 3, opacity: 0 }}
+                        transition={{ duration: 0.1 }}
                       >
-                        <Archive />
-                      </Button>
-                    </Tooltip>
-                  </motion.div>
+                        <Tooltip title="В архив">
+                          <Button
+                            onClick={onArchive}
+                            status="success"
+                            style={{
+                              width: 40,
+                              height: 40,
+                              padding: 0,
+                              display: 'flex',
+                              justifyContent: 'center',
+                              alignItems: 'center',
+                            }}
+                          >
+                            <Archive />
+                          </Button>
+                        </Tooltip>
+                      </motion.div>
+                    )}
+                  </>
                 )}
               </AnimatePresence>
             </motion.div>
@@ -125,17 +131,40 @@ function TodoItemActions({
           </Button>
         </>
       ) : isInArchive ? (
-        <Button style={{ width: 150 }} disabled={true} status="expired">
+        <Button style={{ width: 165, whiteSpace: 'nowrap' }} disabled={true} status="expired">
           В архиве
         </Button>
       ) : (
-        <Button
-          style={{ width: 150 }}
-          onClick={onToggle}
-          status={status === 'completed' ? 'success' : status === 'expired' ? 'expired' : 'active'}
-        >
-          {mainButtonText}
-        </Button>
+        <>
+          {status === 'expired' && (
+            <Tooltip title="Удалить">
+              <Button
+                onClick={onDelete}
+                status="danger"
+                style={{
+                  width: 40,
+                  height: 40,
+                  padding: 0,
+                  display: 'flex',
+                  justifyContent: 'center',
+                  alignItems: 'center',
+                }}
+              >
+                <Trash2 />
+              </Button>
+            </Tooltip>
+          )}
+
+          <Button
+            style={{ width: 165, whiteSpace: 'nowrap' }}
+            onClick={onToggle}
+            status={
+              status === 'completed' ? 'success' : status === 'expired' ? 'expired' : 'active'
+            }
+          >
+            {mainButtonText}
+          </Button>
+        </>
       )}
     </div>
   );

@@ -18,7 +18,10 @@ function ArchiveWrapper() {
   const deleteTodo = useDeleteTodo();
 
   const todosList: TTodo[] = todosQuery.data
-    ? Object.keys(todosQuery.data.archive).map((todoId) => todosQuery.data.list[todoId])
+    ? Object.keys(todosQuery.data.archive)
+        .map((todoId) => todosQuery.data.list[todoId])
+        .slice()
+        .sort((a, b) => a.order - b.order)
     : [];
 
   const callbacks = {
@@ -41,7 +44,7 @@ function ArchiveWrapper() {
         ) : options.isTodosListExists ? (
           <AnimatePresence>
             <Grid
-              data={todosList.slice().sort((a, b) => a.order - b.order)}
+              data={todosList}
               renderItem={(todo) => {
                 return (
                   <motion.div exit={{ opacity: 0, y: 10 }}>

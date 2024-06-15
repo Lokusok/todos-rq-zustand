@@ -1,0 +1,8 @@
+.drawerField {
+  padding-bottom: 20px;
+  margin-bottom: 20px;
+
+  &:not(:last-of-type) {
+    border-bottom: 2px solid #ddd;
+  }
+}

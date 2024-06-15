@@ -142,6 +142,7 @@ function TodoItem({
           completeBtnText={completeBtnText}
           isCompleteBtnDisabled={isCompleteBtnDisabled}
           isDeleteBtnVisible={Boolean(onDelete)}
+          isArchiveBtnVisible={Boolean(onArchive)}
           isInArchive={isInArchive}
           onArchive={callbacks.archiveTodo}
           onDelete={callbacks.deleteTodo}

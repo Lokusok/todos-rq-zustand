@@ -4,6 +4,8 @@ import React, { memo, useRef } from 'react';
 import { X } from 'lucide-react';
 import useOnClickOutside from '@/hooks/use-on-clice-outside';
 
+import DrawerField from './drawer-field';
+
 type TProps = {
   children: React.ReactNode;
   title: string;
@@ -38,4 +40,7 @@ function Drawer({ title, children, onClose }: TProps) {
   );
 }
 
-export default memo(Drawer);
+export default {
+  Root: memo(Drawer),
+  Field: memo(DrawerField),
+};
