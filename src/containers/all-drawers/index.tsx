@@ -1,4 +1,4 @@
-import React, { memo } from 'react';
+import { memo } from 'react';
 
 import { useDrawersStore } from '@/store';
 import { TDrawer } from '@/store/drawers/types';
