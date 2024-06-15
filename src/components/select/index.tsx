@@ -41,7 +41,7 @@ function Select({ options, value, onChange }: TProps) {
         onClick={callbacks.toggleDropdown}
         className={style.selectHeader}
       >
-        <span className={style.selectActiveVal}>{activeOption!.label}</span>
+        <span className={style.selectActiveVal}>{activeOption?.label}</span>
 
         <ChevronDown size={16} className={style.selectIcon} />
       </button>

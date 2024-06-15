@@ -74,5 +74,13 @@
     "chart": {
       "title": "Chart"
     }
+  },
+  "notFound": {
+    "title": "Requested page could not be not found...",
+    "linkBtnText": "Go home"
+  },
+  "errorPage": {
+    "title": "Error occured...",
+    "resetBtnText": "Try again"
   }
 }

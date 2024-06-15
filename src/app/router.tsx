@@ -4,6 +4,7 @@ import AllList from './main/all-list';
 import CreateTodo from './main/create-todo';
 import Main from './main';
 import Archive from './main/archive';
+import NotFound from './main/not-found';
 
 const router = createBrowserRouter([
   {
@@ -21,6 +22,10 @@ const router = createBrowserRouter([
       {
         path: 'archive',
         element: <Archive />,
+      },
+      {
+        path: '*',
+        element: <NotFound />,
       },
     ],
   },

@@ -9,7 +9,6 @@ import Select from '@/components/select';
 import Tooltip from '@/components/tooltip';
 
 import { useListSettingsStore } from '@/store/list-settings';
-import { TLanguages } from '@/store/list-settings/types';
 
 import { useModalsStore } from '@/store/modals';
 import useTodos from '@/api/hooks/use-todos';
@@ -27,10 +26,7 @@ function SettingsDrawer({ onClose }: TProps) {
     onShowArchivedChange: (showArchivedVal: boolean) => {
       listSettingsStore.setShowArchived(showArchivedVal);
     },
-    onLanguageChange: (language: TLanguages) => {
-      listSettingsStore.setLanguage(language);
-      console.log({ language });
-
+    onLanguageChange: (language: string) => {
       i18n.changeLanguage(language);
     },
     openChartsModal: () => {
@@ -103,7 +99,7 @@ function SettingsDrawer({ onClose }: TProps) {
                     label: 'Русский',
                   },
                 ]}
-                value={listSettingsStore.language}
+                value={i18n.resolvedLanguage || 'en'}
               />
             </>
           }

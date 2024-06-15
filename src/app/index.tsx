@@ -8,7 +8,10 @@ import { useShallow } from 'zustand/react/shallow';
 import AllToasts from '@/containers/all-toasts';
 import AllDrawers from '@/containers/all-drawers';
 import AllModals from '@/containers/all-modals';
+
 import { useModalsStore } from '@/store/modals';
+
+import ErrorLayout from '@/app/main/error';
 
 function App() {
   const rootRef = useRef<HTMLDivElement>(null);
@@ -27,13 +30,15 @@ function App() {
 
   return (
     <>
-      <div ref={rootRef}>
-        <RouterProvider router={router} />
-      </div>
+      <ErrorLayout>
+        <div ref={rootRef}>
+          <RouterProvider router={router} />
+        </div>
 
-      <AllToasts />
-      <AllDrawers />
-      <AllModals />
+        <AllToasts />
+        <AllDrawers />
+        <AllModals />
+      </ErrorLayout>
     </>
   );
 }

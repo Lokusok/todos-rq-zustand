@@ -1,5 +1,5 @@
 import style from './style.module.scss';
-import React, { memo, useEffect, useRef } from 'react';
+import React, { memo, useLayoutEffect, useRef } from 'react';
 
 type TProps = {
   children: React.ReactNode;
@@ -10,7 +10,7 @@ function Header({ children, additionalItem }: TProps) {
   const childrenDivRef = useRef<HTMLDivElement>(null);
   const centeredDivRef = useRef<HTMLDivElement>(null);
 
-  useEffect(() => {
+  useLayoutEffect(() => {
     if (!childrenDivRef.current || !centeredDivRef.current) return;
 
     requestAnimationFrame(() => {
