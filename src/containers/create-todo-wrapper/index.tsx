@@ -40,8 +40,8 @@ function CreateTodoWrapper() {
 
       toastsStore.add({
         type: 'success',
-        title: 'Успешно добавили',
-        descr: 'Добавление задачи прошло успешно',
+        title: t('notifiers.newTask.success.title'),
+        descr: t('notifiers.newTask.success.descr'),
         timeout: 5000,
       });
     },
@@ -55,7 +55,11 @@ function CreateTodoWrapper() {
         <Section.Title>{t('createTaskTitle')}:</Section.Title>
 
         <Section.Content>
-          <CreateTodoForm submitDisabled={createTodo.isPending} onSubmit={callbacks.onSubmit} />
+          <CreateTodoForm
+            t={t}
+            submitDisabled={createTodo.isPending}
+            onSubmit={callbacks.onSubmit}
+          />
         </Section.Content>
       </Section.Root>
     </>

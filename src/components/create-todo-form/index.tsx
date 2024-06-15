@@ -15,6 +15,7 @@ registerLocale('ru', ru);
 import 'react-datepicker/dist/react-datepicker.css';
 import { add } from 'date-fns';
 import { TTodoDto } from '@/containers/create-todo-wrapper/types';
+import { TFunction } from 'i18next';
 
 const initialFormData: TTodoDto = {
   title: '',
@@ -25,9 +26,10 @@ const initialFormData: TTodoDto = {
 type TProps = {
   onSubmit: (todo: TTodoDto) => void;
   submitDisabled: boolean;
+  t: TFunction<'ns1', undefined>;
 };
 
-function CreateTodoForm({ onSubmit, submitDisabled }: TProps) {
+function CreateTodoForm({ onSubmit, submitDisabled, t }: TProps) {
   const [formData, setFormData] = useState(initialFormData);
 
   const callbacks = {
@@ -54,22 +56,22 @@ function CreateTodoForm({ onSubmit, submitDisabled }: TProps) {
     <form onSubmit={callbacks.onSubmit} className={style.form} autoComplete="off">
       <div className={style.formRow}>
         <label className={style.label}>
-          <span className={style.labelText}>Заголовок:</span>
+          <span className={style.labelText}>{t('createTaskForm.title.label')}:</span>
           <Input
             type="text"
             name="title"
             value={formData.title}
             onChange={callbacks.onChange}
-            placeholder="Заголовок задачи"
+            placeholder={t('createTaskForm.title.placeholder')}
           />
         </label>
       </div>
       <div className={style.formRow}>
         <label className={style.label}>
-          <span className={style.labelText}>Описание:</span>
+          <span className={style.labelText}>{t('createTaskForm.descr.label')}:</span>
           <Input
             multiline
-            placeholder="Описание задачи"
+            placeholder={t('createTaskForm.descr.placeholder')}
             name="descr"
             value={formData.descr}
             onChange={callbacks.onChange}
@@ -79,10 +81,10 @@ function CreateTodoForm({ onSubmit, submitDisabled }: TProps) {
 
       <div className={style.formRow}>
         <label className={style.label}>
-          <span className={style.labelText}>Дата конца:</span>
+          <span className={style.labelText}>{t('createTaskForm.endTime.label')}:</span>
           <DatePicker
             minDate={add(new Date(), { days: 1 })}
-            placeholderText="До какого числа завершить?"
+            placeholderText={t('createTaskForm.endTime.label')}
             className={clsx(style.input, inputStyle.input)}
             enableTabLoop={false}
             locale="ru"
@@ -90,13 +92,14 @@ function CreateTodoForm({ onSubmit, submitDisabled }: TProps) {
             selected={formData.dateEnd ? new Date(formData.dateEnd) : undefined}
             onChange={(date) => callbacks.handleDateChange(date?.toISOString() || '')}
             onKeyDown={(e) => e.preventDefault()}
+            dateFormat={'dd.MM.yyyy'}
           />
         </label>
       </div>
 
       <div className={style.formRow}>
         <Button disabled={options.isSubmitBtnDisabled} status={'success'} type="submit">
-          Создать
+          {t('createTaskForm.submitBtn.text')}
         </Button>
       </div>
     </form>

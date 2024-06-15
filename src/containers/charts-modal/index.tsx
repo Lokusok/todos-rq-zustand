@@ -1,17 +1,31 @@
 import { memo } from 'react';
+import { useTranslation } from 'react-i18next';
 
 import Modal from '@/components/modal';
 
 import useTodos from '@/api/hooks/use-todos';
 
+import { PieChart, Pie, Cell, ResponsiveContainer, Tooltip as RechartsTooltip } from 'recharts';
+import getTodoStatus from '@/utils/get-todo-status';
+
 type TProps = {
   onClose?: () => void;
 };
 
-import { PieChart, Pie, Cell, ResponsiveContainer, Tooltip as RechartsTooltip } from 'recharts';
-import getTodoStatus from '@/utils/get-todo-status';
+type TColorsKeys = 'expired' | 'archived' | 'completed' | 'in_process';
 
-const COLORS = ['#0088FE', '#00C49F', '#FFBB28', '#FF8042'];
+type TDataRow = {
+  type: TColorsKeys;
+  name: string;
+  value: number;
+};
+
+const COLORS: Record<TColorsKeys, string> = {
+  expired: '#FFBB28',
+  archived: '#c42a00',
+  completed: '#00C49F',
+  in_process: '#b400c4',
+};
 
 const RADIAN = Math.PI / 180;
 const renderCustomizedLabel = ({
@@ -35,34 +49,42 @@ const renderCustomizedLabel = ({
 
 function ChartsModal({ onClose }: TProps) {
   const todosQuery = useTodos();
+  const { t } = useTranslation();
 
   if (todosQuery.isFetching) return null;
 
-  const data = [
+  const data: TDataRow[] = [
     {
-      name: 'Оставшиеся',
+      type: 'in_process',
+      name: t('taskItemStatusesMultiple.inProcess'),
       value: Object.values(todosQuery.data?.list || []).filter(
         (todo) => getTodoStatus(todo) === 'in_process' && !(todo.id in todosQuery.data!.archive)
       ).length,
     },
     {
-      name: 'Выполненные',
+      type: 'completed',
+      name: t('taskItemStatusesMultiple.completed'),
       value: Object.values(todosQuery.data?.list || []).filter(
         (todo) => getTodoStatus(todo) === 'completed'
       ).length,
     },
     {
-      name: 'Истёкшие',
+      type: 'expired',
+      name: t('taskItemStatusesMultiple.expired'),
       value: Object.values(todosQuery.data!.list).filter(
         (todo) => getTodoStatus(todo) === 'expired'
       ).length,
     },
-    { name: 'В архиве', value: Object.values(todosQuery.data?.archive || []).length },
+    {
+      type: 'archived',
+      name: t('taskItemStatusesMultiple.archived'),
+      value: Object.values(todosQuery.data?.archive || []).length,
+    },
   ];
   const updatedData = data.filter((stat) => stat.value > 0);
 
   return (
-    <Modal title="График" onClose={onClose}>
+    <Modal title={`${t('modals.chart.title')}:`} onClose={onClose}>
       <div style={{ height: 220 }}>
         <ResponsiveContainer width="100%" height="100%">
           <PieChart width={400} height={400}>
@@ -78,8 +100,8 @@ function ChartsModal({ onClose }: TProps) {
               dataKey="value"
               isAnimationActive={false}
             >
-              {updatedData.map((payload, index) => (
-                <Cell key={`cell-${payload.name}`} fill={COLORS[index % COLORS.length]} />
+              {updatedData.map((payload) => (
+                <Cell key={`cell-${payload.name}`} fill={COLORS[payload.type]} />
               ))}
             </Pie>
           </PieChart>

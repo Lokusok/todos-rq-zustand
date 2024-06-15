@@ -32,10 +32,47 @@
     "inProcess": "В процессе",
     "expired": "Время вышло"
   },
+  "taskItemStatusesMultiple": {
+    "completed": "Выполненные",
+    "inProcess": "Оставшиеся",
+    "expired": "Истёкшие",
+    "archived": "В архиве"
+  },
   "taskItemHelpers": {
     "removeFromArchive": "Из архива",
     "delete": "Удалить",
     "inArchive": "В архиве",
+    "toArchive": "В архив",
     "blocked": "Заблокировано"
+  },
+  "createTaskForm": {
+    "title": {
+      "label": "Заголовок",
+      "placeholder": "Заголовок задачи"
+    },
+    "descr": {
+      "label": "Описание",
+      "placeholder": "Описание задачи"
+    },
+    "endTime": {
+      "label": "Дата конца",
+      "placeholder": "До какого числа завершить?"
+    },
+    "submitBtn": {
+      "text": "Создать"
+    }
+  },
+  "notifiers": {
+    "newTask": {
+      "success": {
+        "title": "Успешно добавили",
+        "descr": "Добавление задачи прошло успешно"
+      }
+    }
+  },
+  "modals": {
+    "chart": {
+      "title": "График"
+    }
   }
 }

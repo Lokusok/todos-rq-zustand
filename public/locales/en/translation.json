@@ -32,10 +32,47 @@
     "inProcess": "In process",
     "expired": "Expired"
   },
+  "taskItemStatusesMultiple": {
+    "completed": "Completed",
+    "inProcess": "Remaining",
+    "expired": "Expired",
+    "archived": "Archived"
+  },
   "taskItemHelpers": {
     "removeFromArchive": "From archive",
     "delete": "Remove",
-    "inArchive": "To archive",
+    "inArchive": "In archive",
+    "toArchive": "To archive",
     "blocked": "Blocked"
+  },
+  "createTaskForm": {
+    "title": {
+      "label": "Title",
+      "placeholder": "Title of task"
+    },
+    "descr": {
+      "label": "Description",
+      "placeholder": "Description of task"
+    },
+    "endTime": {
+      "label": "Deadline",
+      "placeholder": "Enter deadline"
+    },
+    "submitBtn": {
+      "text": "Create"
+    }
+  },
+  "notifiers": {
+    "newTask": {
+      "success": {
+        "title": "Successfully added",
+        "descr": "Task is successfully created"
+      }
+    }
+  },
+  "modals": {
+    "chart": {
+      "title": "Chart"
+    }
   }
 }

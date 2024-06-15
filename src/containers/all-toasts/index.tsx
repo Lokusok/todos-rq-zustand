@@ -52,7 +52,7 @@ function AllToasts() {
     <>
       <div
         style={{
-          position: 'absolute',
+          position: 'fixed',
           display: 'flex',
           flexDirection: 'column',
           rowGap: '20px',

@@ -84,7 +84,7 @@ function TodoItemActions({
                         exit={{ x: 3, opacity: 0 }}
                         transition={{ duration: 0.1 }}
                       >
-                        <Tooltip title={t('taskItemHelpers.inArchive')}>
+                        <Tooltip title={t('taskItemHelpers.toArchive')}>
                           <Button
                             onClick={onArchive}
                             status="success"
@@ -141,7 +141,7 @@ function TodoItemActions({
       ) : (
         <>
           {status === 'expired' && (
-            <Tooltip title={t('taskItemHelpers.inArchive')}>
+            <Tooltip title={t('taskItemHelpers.toArchive')}>
               <Button
                 onClick={onDelete}
                 status="danger"
