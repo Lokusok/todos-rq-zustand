@@ -1,4 +1,5 @@
 import { memo } from 'react';
+import { useTranslation } from 'react-i18next';
 
 import Drawer from '@/components/drawer';
 import Toggler from '@/components/toggler';
@@ -28,10 +29,12 @@ function SettingsDrawer({ onClose }: TProps) {
     },
     onLanguageChange: (language: TLanguages) => {
       listSettingsStore.setLanguage(language);
+      console.log({ language });
+
+      i18n.changeLanguage(language);
     },
     openChartsModal: () => {
       modalsStore.add({ type: 'charts' });
-      // onClose?.();
     },
   };
 
@@ -39,11 +42,13 @@ function SettingsDrawer({ onClose }: TProps) {
     isChartsBtnDisabled: !todosQuery.data || Object.values(todosQuery.data.list).length <= 0,
   };
 
+  const { t, i18n } = useTranslation();
+
   return (
-    <Drawer.Root title="Настройки" onClose={onClose}>
+    <Drawer.Root title={t('options.title')} onClose={onClose}>
       <Drawer.Field>
         <LabelRow
-          title="Показать архивированные"
+          title={`${t('options.archiveEnableLabel')}:`}
           input={
             <Toggler
               checked={listSettingsStore.showArchived}
@@ -56,25 +61,25 @@ function SettingsDrawer({ onClose }: TProps) {
       <Drawer.Field>
         {options.isChartsBtnDisabled ? (
           <LabelRow
-            title="Показать графики:"
+            title={`${t('options.showChartsLabel')}:`}
             input={
-              <Tooltip title="Сначала создайте задачи">
+              <Tooltip title={t('options.showChartsBtnDisabledTooltip')}>
                 <Button
                   onClick={callbacks.openChartsModal}
                   disabled={options.isChartsBtnDisabled}
                   status="active"
                 >
-                  Открыть
+                  {t('options.showChartsBtnText')}
                 </Button>
               </Tooltip>
             }
           />
         ) : (
           <LabelRow
-            title="Показать графики:"
+            title={`${t('options.showChartsLabel')}:`}
             input={
               <Button onClick={callbacks.openChartsModal} status="active">
-                Открыть
+                {t('options.showChartsBtnText')}
               </Button>
             }
           />
@@ -83,7 +88,7 @@ function SettingsDrawer({ onClose }: TProps) {
 
       <Drawer.Field>
         <LabelRow
-          title="Язык:"
+          title={`${t('options.languageLabel')}:`}
           input={
             <>
               <Select

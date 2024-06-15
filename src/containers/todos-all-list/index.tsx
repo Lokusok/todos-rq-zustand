@@ -1,4 +1,5 @@
 import { memo } from 'react';
+import { useTranslation } from 'react-i18next';
 
 import Section from '@/components/section';
 import TodoItem from '@/components/todo-item';
@@ -104,10 +105,12 @@ function TodosAllList() {
     isTodosListExists: Number(todosList.length) > 0,
   };
 
+  const { t } = useTranslation();
+
   return (
     <>
       <Section.Root>
-        <Section.Title>Список дел:</Section.Title>
+        <Section.Title>{t('listTasksTitle')}:</Section.Title>
         <Section.Content>
           {todosQuery.isFetching ? (
             <GridSkeleton elemsCount={4} />
@@ -119,6 +122,7 @@ function TodosAllList() {
 
                 return (
                   <TodoItem
+                    t={t}
                     onArchive={
                       isTodoInArchive ? callbacks.removeTodoFromArchive : callbacks.addTodoToArchive
                     }
@@ -134,7 +138,7 @@ function TodosAllList() {
               keyExtractor={(todo) => (todo as TTodo).id}
             />
           ) : (
-            <EmptyBanner goToHref="/create_todo" />
+            <EmptyBanner t={t} goToHref="/create_todo" />
           )}
         </Section.Content>
 

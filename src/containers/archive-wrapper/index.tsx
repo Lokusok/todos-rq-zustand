@@ -1,5 +1,6 @@
 import { memo } from 'react';
 import { Link } from 'react-router-dom';
+import { useTranslation } from 'react-i18next';
 
 import { AnimatePresence, motion } from 'framer-motion';
 
@@ -34,9 +35,11 @@ function ArchiveWrapper() {
     isTodosListExists: Number(todosList.length) > 0,
   };
 
+  const { t } = useTranslation();
+
   return (
     <Section.Root>
-      <Section.Title>Архив:</Section.Title>
+      <Section.Title>{t('archiveTitle')}:</Section.Title>
 
       <Section.Content>
         {todosQuery.isFetching ? (
@@ -49,6 +52,7 @@ function ArchiveWrapper() {
                 return (
                   <motion.div exit={{ opacity: 0, y: 10 }}>
                     <TodoItem
+                      t={t}
                       todo={todo as TTodo}
                       isCompleteBtnDisabled={true}
                       onDelete={callbacks.deleteTodo}
@@ -62,11 +66,12 @@ function ArchiveWrapper() {
           </AnimatePresence>
         ) : (
           <EmptyBanner
+            t={t}
             leftActions={
               <>
                 {Object.values(todosQuery.data?.list || {}).length > 0 && (
                   <Link to="/">
-                    <Button status="active">Поместить в архив</Button>
+                    <Button status="active">{t('anyActions.archiveEntity1')}</Button>
                   </Link>
                 )}
               </>

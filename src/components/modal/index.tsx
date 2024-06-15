@@ -1,9 +1,10 @@
 import style from './style.module.scss';
-import React, { memo } from 'react';
+import React, { memo, useRef } from 'react';
 
 import { X } from 'lucide-react';
 
 import Button from '../button';
+import useOnClickInside from '@/hooks/use-on-click-inside';
 
 type TProps = {
   children: React.ReactNode;
@@ -24,14 +25,20 @@ function Modal({
   onSuccess,
   onClose,
 }: TProps) {
+  const backRef = useRef<HTMLDivElement>(null);
+
   const options = {
     isFooterShow:
       (Boolean(onReject) && Boolean(rejectBtnText)) ||
       (Boolean(onSuccess) && Boolean(rejectBtnText)),
   };
 
+  useOnClickInside(backRef, onClose || (() => {}));
+
   return (
     <div className={style.modalWrapper}>
+      <div className={style.modalBack} ref={backRef}></div>
+
       <div className={style.modalContent}>
         {Boolean(onClose) && (
           <div className={style.modalCloseBtnWrapper}>

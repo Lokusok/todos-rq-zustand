@@ -1,12 +1,14 @@
 import style from './style.module.scss';
 import { memo } from 'react';
 import { AnimatePresence, motion } from 'framer-motion';
+import { PackageOpen, Trash2, Archive } from 'lucide-react';
 
 import Button from '@/components/button';
 import Tooltip from '@/components/tooltip';
 
 import { TTodosTypes } from '../types';
-import { PackageOpen, Trash2, Archive } from 'lucide-react';
+
+import { TFunction } from 'i18next';
 
 type TProps = {
   onArchive?: () => void;
@@ -19,6 +21,7 @@ type TProps = {
   completeBtnText?: string;
   isCompleteBtnDisabled?: boolean;
   mainButtonText: string;
+  t: TFunction<'ns1', undefined>;
 };
 
 function TodoItemActions({
@@ -32,6 +35,7 @@ function TodoItemActions({
   isDeleteBtnVisible = false,
   isArchiveBtnVisible = false,
   mainButtonText,
+  t,
 }: TProps) {
   return (
     <div className={style.actions}>
@@ -53,7 +57,7 @@ function TodoItemActions({
                     exit={{ x: 3, opacity: 0 }}
                     transition={{ duration: 0.1 }}
                   >
-                    <Tooltip title="Из архива">
+                    <Tooltip title={t('taskItemHelpers.removeFromArchive')}>
                       <Button
                         onClick={onArchive}
                         status="active"
@@ -80,7 +84,7 @@ function TodoItemActions({
                         exit={{ x: 3, opacity: 0 }}
                         transition={{ duration: 0.1 }}
                       >
-                        <Tooltip title="В архив">
+                        <Tooltip title={t('taskItemHelpers.inArchive')}>
                           <Button
                             onClick={onArchive}
                             status="success"
@@ -109,7 +113,7 @@ function TodoItemActions({
       {isCompleteBtnDisabled ? (
         <>
           {isDeleteBtnVisible && (
-            <Tooltip title="Удалить">
+            <Tooltip title={t('taskItemHelpers.delete')}>
               <Button
                 onClick={onDelete}
                 status="danger"
@@ -127,17 +131,17 @@ function TodoItemActions({
             </Tooltip>
           )}
           <Button disabled={true} status={'expired'}>
-            {completeBtnText || 'Заблокировано'}
+            {completeBtnText || t('taskItemHelpers.blocked')}
           </Button>
         </>
       ) : isInArchive ? (
         <Button style={{ width: 165, whiteSpace: 'nowrap' }} disabled={true} status="expired">
-          В архиве
+          {t('taskItemHelpers.inArchive')}
         </Button>
       ) : (
         <>
           {status === 'expired' && (
-            <Tooltip title="Удалить">
+            <Tooltip title={t('taskItemHelpers.inArchive')}>
               <Button
                 onClick={onDelete}
                 status="danger"

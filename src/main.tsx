@@ -11,6 +11,8 @@ import ThemeProvider from './contexts/theme';
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import { ReactQueryDevtools } from '@tanstack/react-query-devtools';
 
+import './i18n';
+
 const queryClient = new QueryClient({
   defaultOptions: {
     queries: {

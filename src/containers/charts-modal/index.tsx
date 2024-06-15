@@ -62,7 +62,7 @@ function ChartsModal({ onClose }: TProps) {
   const updatedData = data.filter((stat) => stat.value > 0);
 
   return (
-    <Modal title="Графики" onClose={onClose}>
+    <Modal title="График" onClose={onClose}>
       <div style={{ height: 220 }}>
         <ResponsiveContainer width="100%" height="100%">
           <PieChart width={400} height={400}>
@@ -78,10 +78,8 @@ function ChartsModal({ onClose }: TProps) {
               dataKey="value"
               isAnimationActive={false}
             >
-              {updatedData.map((_, index) => (
-                <>
-                  <Cell key={`cell-${index}`} fill={COLORS[index % COLORS.length]} />
-                </>
+              {updatedData.map((payload, index) => (
+                <Cell key={`cell-${payload.name}`} fill={COLORS[index % COLORS.length]} />
               ))}
             </Pie>
           </PieChart>

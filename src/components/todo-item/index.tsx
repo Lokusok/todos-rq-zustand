@@ -17,6 +17,8 @@ import { TTodosTypes } from './types';
 import TodoItemsActions from './todo-items-actions';
 import getTodoStatus from '@/utils/get-todo-status';
 
+import { TFunction } from 'i18next';
+
 type TProps = {
   todo: TTodo;
   onDrop?: (firstId: TTodo['id'], secondId: TTodo['id']) => void;
@@ -27,18 +29,7 @@ type TProps = {
   isInArchive?: boolean;
   isCompleteBtnDisabled?: boolean;
   completeBtnText?: string;
-};
-
-const actionTextMap: Record<TTodosTypes, string> = {
-  completed: 'Выполнено',
-  in_process: 'Выполнить',
-  expired: 'Время вышло',
-};
-
-const titleTextMap: Record<TTodosTypes, string> = {
-  completed: 'Выполнено',
-  in_process: 'В процессе',
-  expired: 'Время вышло',
+  t: TFunction<'ns1', undefined>;
 };
 
 function TodoItem({
@@ -51,6 +42,7 @@ function TodoItem({
   isCompleteBtnDisabled = false,
   completeBtnText,
   onDelete,
+  t,
 }: TProps) {
   const [isDraggable, setIsDraggable] = useState(false);
   const [isDragEntered, setIsDragEntered] = useState(false);
@@ -84,6 +76,18 @@ function TodoItem({
     deleteTodo: () => onDelete?.(todo.id),
   };
 
+  const actionTextMap: Record<TTodosTypes, string> = {
+    completed: t('taskItem.toggle'),
+    in_process: t('taskItem.complete'),
+    expired: t('taskItem.expired'),
+  };
+
+  const tooltipTextMap: Record<TTodosTypes, string> = {
+    completed: t('taskItemStatuses.completed'),
+    in_process: t('taskItemStatuses.inProcess'),
+    expired: t('taskItemStatuses.expired'),
+  };
+
   useMakeDroppable(rootRef, {
     isDraggable,
     setIsDragEntered,
@@ -110,7 +114,7 @@ function TodoItem({
 
       <footer className={style.footer}>
         <div className={style.statusIconWrapper}>
-          <Tooltip title={titleTextMap[options.status]}>
+          <Tooltip title={tooltipTextMap[options.status]}>
             {
               <AnimatePresence initial={false} mode={'popLayout'}>
                 <motion.div
@@ -137,6 +141,7 @@ function TodoItem({
           onArchive={callbacks.archiveTodo}
           onDelete={callbacks.deleteTodo}
           onToggle={callbacks.toggleTodo}
+          t={t}
         />
       </footer>
     </article>

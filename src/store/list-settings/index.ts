@@ -9,7 +9,7 @@ export const useListSettingsStore = create<TListSettingsStore>()(
     persist(
       immer((set) => ({
         language: navigator.language,
-        showArchived: false,
+        showArchived: true,
 
         setShowArchived: (showArchivedVal: boolean) =>
           set((state) => {

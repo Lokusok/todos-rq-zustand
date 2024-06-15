@@ -1,4 +1,5 @@
 import { memo } from 'react';
+import { useTranslation } from 'react-i18next';
 
 import CreateTodoForm from '@/components/create-todo-form';
 import Section from '@/components/section';
@@ -46,10 +47,12 @@ function CreateTodoWrapper() {
     },
   };
 
+  const { t } = useTranslation();
+
   return (
     <>
       <Section.Root>
-        <Section.Title>Создание задачи:</Section.Title>
+        <Section.Title>{t('createTaskTitle')}:</Section.Title>
 
         <Section.Content>
           <CreateTodoForm submitDisabled={createTodo.isPending} onSubmit={callbacks.onSubmit} />

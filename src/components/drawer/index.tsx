@@ -2,7 +2,7 @@ import style from './style.module.scss';
 import React, { memo, useRef } from 'react';
 
 import { X } from 'lucide-react';
-import useOnClickOutside from '@/hooks/use-on-clice-outside';
+import useOnClickInside from '@/hooks/use-on-click-inside';
 
 import DrawerField from './drawer-field';
 
@@ -13,13 +13,15 @@ type TProps = {
 };
 
 function Drawer({ title, children, onClose }: TProps) {
-  const contentRef = useRef<HTMLDivElement>(null);
+  const backRef = useRef<HTMLDivElement>(null);
 
-  useOnClickOutside(contentRef, onClose || (() => {}));
+  useOnClickInside(backRef, onClose || (() => {}));
 
   return (
     <div className={style.drawerLayout}>
-      <div className={style.drawerContent} ref={contentRef}>
+      <div className={style.drawerBack} ref={backRef}></div>
+
+      <div className={style.drawerContent}>
         <div className={style.drawerCloseBtnWrapper}>
           {Boolean(onClose) && (
             <button onClick={onClose} className={style.drawerCloseBtn}>

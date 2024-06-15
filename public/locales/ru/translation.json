@@ -1,0 +1,41 @@
+{
+  "listTasksTitle": "Список дел",
+  "createTaskTitle": "Создать задачу",
+  "archiveTitle": "Архив",
+
+  "options": {
+    "title": "Настройки",
+    "archiveEnableLabel": "Показать архивированные",
+    "showChartsLabel": "Показать график",
+    "showChartsBtnText": "Открыть",
+    "showChartsBtnDisabledTooltip": "Сначала создайте задачи",
+    "languageLabel": "Язык"
+  },
+  "utils": {
+    "tooltipSettings": "Настройки",
+    "tooltipSwitchTheme": "Переключить тему"
+  },
+  "empty": {
+    "title": "Пока что здесь пусто"
+  },
+  "anyActions": {
+    "archiveEntity1": "Архивировать задачу",
+    "createEntity1": "Создать задачу"
+  },
+  "taskItem": {
+    "complete": "Выполнить",
+    "toggle": "Выполнено",
+    "expired": "Время вышло"
+  },
+  "taskItemStatuses": {
+    "completed": "Выполнено",
+    "inProcess": "В процессе",
+    "expired": "Время вышло"
+  },
+  "taskItemHelpers": {
+    "removeFromArchive": "Из архива",
+    "delete": "Удалить",
+    "inArchive": "В архиве",
+    "blocked": "Заблокировано"
+  }
+}

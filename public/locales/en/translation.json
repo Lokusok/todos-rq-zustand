@@ -1,0 +1,41 @@
+{
+  "listTasksTitle": "Tasks list",
+  "createTaskTitle": "Create task",
+  "archiveTitle": "Archive",
+
+  "options": {
+    "title": "Settings",
+    "archiveEnableLabel": "Show archived",
+    "showChartsLabel": "Show chart",
+    "showChartsBtnText": "Open",
+    "showChartsBtnDisabledTooltip": "For start - create task",
+    "languageLabel": "Language"
+  },
+  "utils": {
+    "tooltipSettings": "Settings",
+    "tooltipSwitchTheme": "Switch theme"
+  },
+  "empty": {
+    "title": "It's empty here for now"
+  },
+  "anyActions": {
+    "archiveEntity1": "Archivate task",
+    "createEntity1": "Create task"
+  },
+  "taskItem": {
+    "complete": "Perform",
+    "toggle": "Already done",
+    "expired": "Time out"
+  },
+  "taskItemStatuses": {
+    "completed": "Completed",
+    "inProcess": "In process",
+    "expired": "Expired"
+  },
+  "taskItemHelpers": {
+    "removeFromArchive": "From archive",
+    "delete": "Remove",
+    "inArchive": "To archive",
+    "blocked": "Blocked"
+  }
+}
