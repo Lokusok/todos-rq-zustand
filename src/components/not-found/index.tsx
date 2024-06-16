@@ -9,11 +9,12 @@ import { TFunction } from 'i18next';
 import Button from '../button';
 
 type TProps = {
-  t: TFunction<'ns1', undefined>;
+  t?: TFunction<'ns1', undefined>;
+  buttonText?: string;
   goToHref?: string;
 };
 
-function NotFound({ t, goToHref }: TProps) {
+function NotFound({ t, goToHref, buttonText }: TProps) {
   return (
     <div className={style.notFoundWrapper}>
       <div>
@@ -22,7 +23,7 @@ function NotFound({ t, goToHref }: TProps) {
 
       {Boolean(goToHref) && (
         <Link to="/">
-          <Button>{t('notFound.linkBtnText')}</Button>
+          <Button>{t ? 'notFound.linkBtnText' : buttonText}</Button>
         </Link>
       )}
     </div>

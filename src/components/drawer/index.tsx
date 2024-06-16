@@ -10,21 +10,26 @@ type TProps = {
   children: React.ReactNode;
   title: string;
   onClose?: () => void;
+  testId?: string;
 };
 
-function Drawer({ title, children, onClose }: TProps) {
+function Drawer({ title, children, onClose, testId }: TProps) {
   const backRef = useRef<HTMLDivElement>(null);
 
   useOnClickInside(backRef, onClose || (() => {}));
 
   return (
-    <div className={style.drawerLayout}>
-      <div className={style.drawerBack} ref={backRef}></div>
+    <div className={style.drawerLayout} data-testid={testId}>
+      <div className={style.drawerBack} ref={backRef} data-testid="drawer-back"></div>
 
       <div className={style.drawerContent}>
         <div className={style.drawerCloseBtnWrapper}>
           {Boolean(onClose) && (
-            <button onClick={onClose} className={style.drawerCloseBtn}>
+            <button
+              data-testid="drawer-close-btn"
+              onClick={onClose}
+              className={style.drawerCloseBtn}
+            >
               <X size={32} className={style.closeIcon} />
             </button>
           )}

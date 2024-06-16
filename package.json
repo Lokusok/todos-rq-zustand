@@ -40,6 +40,7 @@
     "react-router-dom": "^6.23.1",
     "recharts": "^2.12.7",
     "sass": "^1.77.4",
+    "storybook-addon-react-router-v6": "^2.0.15",
     "zustand": "^4.5.2"
   },
   "devDependencies": {

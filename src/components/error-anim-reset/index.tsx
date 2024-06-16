@@ -10,10 +10,11 @@ import { TFunction } from 'i18next';
 
 type TProps = {
   onErrorReset?: () => void;
-  t: TFunction<'ns1', undefined>;
+  t?: TFunction<'ns1', undefined>;
+  buttonText?: string;
 };
 
-function ErrorAnimReset({ onErrorReset, t }: TProps) {
+function ErrorAnimReset({ onErrorReset, t, buttonText }: TProps) {
   return (
     <div className={style.errorAnimResetWrapper}>
       <div>
@@ -21,7 +22,7 @@ function ErrorAnimReset({ onErrorReset, t }: TProps) {
       </div>
 
       {Boolean(onErrorReset) && (
-        <Button onClick={onErrorReset}>{t('errorPage.resetBtnText')}</Button>
+        <Button onClick={onErrorReset}>{t ? t('errorPage.resetBtnText') : buttonText}</Button>
       )}
     </div>
   );
