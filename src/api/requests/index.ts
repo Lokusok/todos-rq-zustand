@@ -15,7 +15,7 @@ export const fetchTodos: (options: TOptions) => Promise<TTodosSliceState> = asyn
   page = -1,
   excludeArchive,
 }) => {
-  console.log('i am here');
+  // await new Promise((resolve) => setTimeout(resolve, 3000));
   return getAllTodosFromLocalStorage({ page, excludeArchive });
 };
 

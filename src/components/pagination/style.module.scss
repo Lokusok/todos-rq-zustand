@@ -26,6 +26,10 @@
   pointer-events: none;
 }
 
+:root[data-theme='dark'] .buttonActive {
+  color: var(--dark-color);
+}
+
 .list {
   display: flex;
   column-gap: 15px;

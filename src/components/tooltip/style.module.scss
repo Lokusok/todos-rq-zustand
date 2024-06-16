@@ -1,3 +1,11 @@
+:root[data-theme='dark'] .tooltip {
+  color: var(--dark-color);
+}
+
+:root[data-theme='light'] .tooltip {
+  color: var(--dark-color);
+}
+
 .root {
   position: relative;
 }
