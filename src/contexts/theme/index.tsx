@@ -10,7 +10,7 @@ export function useTheme() {
 
   if (!ctx) {
     throw new Error(
-      'Компоненты, использующие ThemeContext должны быть обёрнуты в <ThemeProvider />'
+      'Компоненты, использующие ThemeContext должны быть обёрнуты в <ThemeProvider />',
     );
   }
 
@@ -31,10 +31,12 @@ function ThemeProvider({ children }: TProps) {
       theme,
       setTheme,
     }),
-    [theme, setTheme]
+    [theme, setTheme],
   );
 
   useEffect(() => {
+    document.documentElement.setAttribute('data-theme', theme);
+
     switch (theme) {
       case 'dark': {
         document.documentElement.style.setProperty('--text-color', '#fbfbfb');

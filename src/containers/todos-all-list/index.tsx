@@ -141,7 +141,7 @@ function TodosAllList() {
         <Section.Content>
           <AnimatePresence mode="popLayout">
             {todosQuery.isFetching ? (
-              <React.Fragment key="skeletons-fragment">
+              <AnimatePresence key="skeletons-fragment">
                 <motion.div
                   key={`skeletons-${Number(todosQuery.isFetching)}`}
                   initial={{ opacity: 0 }}
@@ -150,9 +150,9 @@ function TodosAllList() {
                 >
                   <GridSkeleton elemsCount={4} />
                 </motion.div>
-              </React.Fragment>
+              </AnimatePresence>
             ) : options.isTodosListExists ? (
-              <React.Fragment key="nature_elements-fragment">
+              <AnimatePresence key="nature_elements-fragment">
                 <motion.div
                   key={'nature_elements'}
                   initial={{ opacity: 0 }}
@@ -184,9 +184,9 @@ function TodosAllList() {
                     keyExtractor={(todo) => (todo as TTodo).id}
                   />
                 </motion.div>
-              </React.Fragment>
+              </AnimatePresence>
             ) : (
-              <React.Fragment key="empty_banner-fragment">
+              <AnimatePresence key="empty_banner-fragment">
                 <motion.div
                   key={'empty_banner'}
                   initial={{ opacity: 0 }}
@@ -195,7 +195,7 @@ function TodosAllList() {
                 >
                   <EmptyBanner t={t} goToHref="/create_todo" />
                 </motion.div>
-              </React.Fragment>
+              </AnimatePresence>
             )}
           </AnimatePresence>
         </Section.Content>

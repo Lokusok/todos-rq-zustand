@@ -15,7 +15,12 @@ function ThemeToggler() {
   };
 
   return (
-    <button className={style.button} onClick={callbacks.toggleTheme}>
+    <button
+      data-testid={'theme-toggler'}
+      data-theme={theme}
+      className={style.button}
+      onClick={callbacks.toggleTheme}
+    >
       <div className={style.inner}>
         <AnimatePresence initial={false} mode={'wait'}>
           {theme === 'dark' ? (

@@ -9,8 +9,8 @@ import Select from '@/components/select';
 import Tooltip from '@/components/tooltip';
 
 import { useListSettingsStore } from '@/store/list-settings';
-
 import { useModalsStore } from '@/store/modals';
+
 import useTodos from '@/api/hooks/use-todos';
 
 type TProps = {

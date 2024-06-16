@@ -15,6 +15,7 @@ export const fetchTodos: (options: TOptions) => Promise<TTodosSliceState> = asyn
   page = -1,
   excludeArchive,
 }) => {
+  console.log('i am here');
   return getAllTodosFromLocalStorage({ page, excludeArchive });
 };
 

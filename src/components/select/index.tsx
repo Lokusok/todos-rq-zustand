@@ -4,7 +4,7 @@ import { memo, useId, useMemo, useState } from 'react';
 import clsx from 'clsx';
 import { ChevronDown } from 'lucide-react';
 
-type TOption = {
+export type TOption = {
   value: string;
   label: string;
 };
@@ -20,7 +20,7 @@ function Select({ options, value, onChange }: TProps) {
 
   const activeOption = useMemo(
     () => options.find((option) => option.value === value),
-    [value, options]
+    [value, options],
   );
 
   const dropdownId = useId();
@@ -40,6 +40,7 @@ function Select({ options, value, onChange }: TProps) {
         aria-controls={dropdownId}
         onClick={callbacks.toggleDropdown}
         className={style.selectHeader}
+        data-testid="dropdown-header-btn"
       >
         <span className={style.selectActiveVal}>{activeOption?.label}</span>
 
@@ -49,15 +50,17 @@ function Select({ options, value, onChange }: TProps) {
       <div
         id={dropdownId}
         className={clsx(style.selectDropdown, { [style.selectDropdownActive]: isOpen })}
+        data-testid="dropdown-list"
       >
         <div className={style.selectList}>
-          {options.map((option) => (
+          {options.map((option, index) => (
             <button
               onClick={() => callbacks.onValueChange(option.value)}
               key={option.value}
               className={clsx(style.selectListItem, {
                 [style.active]: value === option!.value,
               })}
+              data-testid={`dropdown-item-${index}`}
             >
               {option.label}
             </button>

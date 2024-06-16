@@ -10,10 +10,10 @@ type TProps = {
   goToHref?: string;
   leftActions?: React.ReactNode;
   rightActions?: React.ReactNode;
-  t: TFunction<'ns1', undefined>;
+  t?: TFunction<'ns1', undefined> | ((arg: string) => React.ReactNode);
 };
 
-function EmptyBanner({ goToHref = '/', leftActions, rightActions, t }: TProps) {
+function EmptyBanner({ goToHref = '/', leftActions, rightActions, t = () => <></> }: TProps) {
   return (
     <div className={style.root}>
       <div className={style.content}>

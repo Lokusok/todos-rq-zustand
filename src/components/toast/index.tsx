@@ -13,15 +13,23 @@ type TProps = {
   descr?: string;
   timeout?: number;
   closeCb?: () => void;
+  testId?: string;
 };
 
 const iconsMap: Record<TToastsTypes, React.ReactNode> = {
-  success: <CircleCheckBig size={28} />,
-  error: <BadgeX size={28} />,
-  info: <Info size={28} />,
+  success: <CircleCheckBig size={28} data-testid="toast-success-icon" />,
+  error: <BadgeX size={28} data-testid="toast-error-icon" />,
+  info: <Info size={28} data-testid="toast-info-icon" />,
 };
 
-function Toast({ status = 'info', title, descr, timeout = 4000, closeCb }: TProps) {
+function Toast({
+  status = 'info',
+  title,
+  descr,
+  timeout = 4000,
+  closeCb,
+  testId = 'toast',
+}: TProps) {
   const [isHovered, setIsHovered] = useState(false);
 
   const statusClassName = style[status as keyof typeof style];
@@ -41,10 +49,11 @@ function Toast({ status = 'info', title, descr, timeout = 4000, closeCb }: TProp
       onPointerEnter={() => setIsHovered(true)}
       onPointerLeave={() => setIsHovered(false)}
       className={clsx(style.root, statusClassName)}
+      data-testid={testId}
     >
       {Boolean(closeCb) && (
         <div className={style.closeBtnWrapper}>
-          <button onClick={closeCb} className={style.closeBtn}>
+          <button data-testid="toast-close-btn" onClick={closeCb} className={style.closeBtn}>
             <X size={24} />
           </button>
         </div>

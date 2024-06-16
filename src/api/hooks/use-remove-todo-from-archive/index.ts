@@ -10,6 +10,10 @@ function useRemoveTodoFromArchive() {
       queryClient.invalidateQueries({
         queryKey: ['todos'],
       });
+
+      queryClient.invalidateQueries({
+        queryKey: ['archivedTodos'],
+      });
     },
   });
 }

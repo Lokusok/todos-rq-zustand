@@ -7,8 +7,9 @@
 }
 
 :root {
-  // --accent-color-1: rgba(239 246 246 / 0.6);
   --accent-color-1: #f9ffff;
+
+  --dark-color: #121212;
 
   --text-color: #121212;
   --bg-color: #fbfbfb;
@@ -27,7 +28,9 @@ body {
   background: var(--bg-color);
   font-family: 'Andika', sans-serif;
 
-  transition: background ease 0.15s, color ease 0.15s;
+  transition:
+    background ease 0.15s,
+    color ease 0.15s;
 }
 
 input,

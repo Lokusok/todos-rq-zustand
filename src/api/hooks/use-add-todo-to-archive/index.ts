@@ -9,9 +9,13 @@ function useAddTodoToArchive(options: TOptions) {
 
   return useMutation({
     mutationFn: addTodoToArchive,
-    onSettled: async () => {
+    onSettled: () => {
       queryClient.setQueryData(['todos', options], () => {
         return getAllTodosFromLocalStorage(options);
+      });
+
+      queryClient.setQueryData(['todos'], () => {
+        return getAllTodosFromLocalStorage({});
       });
 
       queryClient.invalidateQueries({

@@ -14,6 +14,7 @@ type TProps = {
   okButtonText?: string;
   onSuccess?: () => void;
   onClose?: () => void;
+  testId?: string;
 };
 
 function Modal({
@@ -24,6 +25,7 @@ function Modal({
   okButtonText,
   onSuccess,
   onClose,
+  testId,
 }: TProps) {
   const backRef = useRef<HTMLDivElement>(null);
 
@@ -36,13 +38,17 @@ function Modal({
   useOnClickInside(backRef, onClose || (() => {}));
 
   return (
-    <div className={style.modalWrapper}>
+    <div className={style.modalWrapper} data-testid={testId}>
       <div className={style.modalBack} ref={backRef}></div>
 
       <div className={style.modalContent}>
         {Boolean(onClose) && (
           <div className={style.modalCloseBtnWrapper}>
-            <button onClick={onClose} className={style.modalCloseBtn}>
+            <button
+              data-testid="modal-test-close-btn"
+              onClick={onClose}
+              className={style.modalCloseBtn}
+            >
               <X size={28} className={style.modalCloseBtnIcon} />
             </button>
           </div>
