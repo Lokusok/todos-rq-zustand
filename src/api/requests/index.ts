@@ -63,8 +63,6 @@ export const addTodoToArchive: (todoId: TTodo['id']) => Promise<TTodo> = async (
 
   saveToLocalStorage(state);
 
-  console.log(state);
-
   return state.todos.list[todoId];
 };
 

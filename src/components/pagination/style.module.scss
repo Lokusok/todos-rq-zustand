@@ -24,9 +24,6 @@
   background: #d0f2f2;
   cursor: default;
   pointer-events: none;
-}
-
-:root[data-theme='dark'] .buttonActive {
   color: var(--dark-color);
 }
 

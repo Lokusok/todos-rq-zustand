@@ -84,8 +84,6 @@ function TodosAllList() {
 
       requestIdleCallback(() => {
         queryClient.setQueryData(['todos', queryOptionsExternal], (state: any) => {
-          console.log(state);
-
           const newState = {
             ...state,
             list: Object.fromEntries(
@@ -132,8 +130,6 @@ function TodosAllList() {
   };
 
   const { t } = useTranslation();
-
-  console.log('is fetching all todos?', todosQuery.isFetching);
 
   return (
     <>

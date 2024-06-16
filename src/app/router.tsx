@@ -1,31 +1,48 @@
+import { Suspense, lazy } from 'react';
 import { createBrowserRouter } from 'react-router-dom';
 
-import AllList from './main/all-list';
-import CreateTodo from './main/create-todo';
-import Main from './main';
-import Archive from './main/archive';
-import NotFound from './main/not-found';
+const LazyAllList = lazy(() => import('./main/all-list'));
+const LazyCreateTodo = lazy(() => import('./main/create-todo'));
+const LazyMain = lazy(() => import('./main'));
+const LazyArchive = lazy(() => import('./main/archive'));
+const LazyNotFound = lazy(() => import('./main/not-found'));
 
 const router = createBrowserRouter([
   {
     path: '/',
-    element: <Main />,
+    element: <LazyMain />,
     children: [
       {
         index: true,
-        element: <AllList />,
+        element: (
+          <Suspense fallback={null}>
+            <LazyAllList />
+          </Suspense>
+        ),
       },
       {
         path: 'create_todo',
-        element: <CreateTodo />,
+        element: (
+          <Suspense fallback={null}>
+            <LazyCreateTodo />
+          </Suspense>
+        ),
       },
       {
         path: 'archive',
-        element: <Archive />,
+        element: (
+          <Suspense fallback={null}>
+            <LazyArchive />
+          </Suspense>
+        ),
       },
       {
         path: '*',
-        element: <NotFound />,
+        element: (
+          <Suspense fallback={null}>
+            <LazyNotFound />
+          </Suspense>
+        ),
       },
     ],
   },
