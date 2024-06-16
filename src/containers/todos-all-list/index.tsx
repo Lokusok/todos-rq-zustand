@@ -1,4 +1,4 @@
-import { memo } from 'react';
+import React, { memo } from 'react';
 import { useTranslation } from 'react-i18next';
 
 import { AnimatePresence, motion } from 'framer-motion';
@@ -27,12 +27,12 @@ function TodosAllList() {
   const listSettingsStore = useListSettingsStore(
     useShallow((state) => ({
       showArchived: state.showArchived,
-    }))
+    })),
   );
   const paginationStore = usePaginationStore(
     useShallow((state) => ({
       currentPage: state.currentPage,
-    }))
+    })),
   );
   const queryOptionsExternal = {
     page: paginationStore.currentPage,
@@ -93,7 +93,7 @@ function TodosAllList() {
                 else if (id === secondTodo.id) return [firstTodo.id, firstTodo];
 
                 return [id, todo];
-              })
+              }),
             ),
           };
 
@@ -132,6 +132,8 @@ function TodosAllList() {
 
   const { t } = useTranslation();
 
+  console.log('is fetching all todos?', todosQuery.isFetching);
+
   return (
     <>
       <Section.Root>
@@ -139,55 +141,61 @@ function TodosAllList() {
         <Section.Content>
           <AnimatePresence mode="popLayout">
             {todosQuery.isFetching ? (
-              <motion.div
-                key={'skeletons'}
-                initial={{ opacity: 0 }}
-                animate={{ opacity: 1 }}
-                exit={{ opacity: 0 }}
-              >
-                <GridSkeleton elemsCount={4} />
-              </motion.div>
+              <React.Fragment key="skeletons-fragment">
+                <motion.div
+                  key={`skeletons-${Number(todosQuery.isFetching)}`}
+                  initial={{ opacity: 0 }}
+                  animate={{ opacity: 1 }}
+                  exit={{ opacity: 0 }}
+                >
+                  <GridSkeleton elemsCount={4} />
+                </motion.div>
+              </React.Fragment>
             ) : options.isTodosListExists ? (
-              <motion.div
-                key={'nature_elements'}
-                initial={{ opacity: 0 }}
-                animate={{ opacity: 1 }}
-                exit={{ opacity: 0 }}
-              >
-                <Grid
-                  data={todosList}
-                  renderItem={(todo: TTodo) => {
-                    const isTodoInArchive = helpers.isTodoInArchive(todo.id);
+              <React.Fragment key="nature_elements-fragment">
+                <motion.div
+                  key={'nature_elements'}
+                  initial={{ opacity: 0 }}
+                  animate={{ opacity: 1 }}
+                  exit={{ opacity: 0 }}
+                >
+                  <Grid
+                    data={todosList}
+                    renderItem={(todo: TTodo) => {
+                      const isTodoInArchive = helpers.isTodoInArchive(todo.id);
 
-                    return (
-                      <TodoItem
-                        t={t}
-                        onArchive={
-                          isTodoInArchive
-                            ? callbacks.removeTodoFromArchive
-                            : callbacks.addTodoToArchive
-                        }
-                        isInArchive={isTodoInArchive}
-                        onComplete={callbacks.completeTodo}
-                        onToggle={callbacks.toggleTodo}
-                        onDelete={callbacks.deleteTodo}
-                        onDrop={callbacks.swapElements}
-                        todo={todo as TTodo}
-                      />
-                    );
-                  }}
-                  keyExtractor={(todo) => (todo as TTodo).id}
-                />
-              </motion.div>
+                      return (
+                        <TodoItem
+                          t={t}
+                          onArchive={
+                            isTodoInArchive
+                              ? callbacks.removeTodoFromArchive
+                              : callbacks.addTodoToArchive
+                          }
+                          isInArchive={isTodoInArchive}
+                          onComplete={callbacks.completeTodo}
+                          onToggle={callbacks.toggleTodo}
+                          onDelete={callbacks.deleteTodo}
+                          onDrop={callbacks.swapElements}
+                          todo={todo as TTodo}
+                        />
+                      );
+                    }}
+                    keyExtractor={(todo) => (todo as TTodo).id}
+                  />
+                </motion.div>
+              </React.Fragment>
             ) : (
-              <motion.div
-                key={'empty_banner'}
-                initial={{ opacity: 0 }}
-                animate={{ opacity: 1 }}
-                exit={{ opacity: 0 }}
-              >
-                <EmptyBanner t={t} goToHref="/create_todo" />
-              </motion.div>
+              <React.Fragment key="empty_banner-fragment">
+                <motion.div
+                  key={'empty_banner'}
+                  initial={{ opacity: 0 }}
+                  animate={{ opacity: 1 }}
+                  exit={{ opacity: 0 }}
+                >
+                  <EmptyBanner t={t} goToHref="/create_todo" />
+                </motion.div>
+              </React.Fragment>
             )}
           </AnimatePresence>
         </Section.Content>

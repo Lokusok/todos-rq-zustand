@@ -1,4 +1,4 @@
-import { memo } from 'react';
+import { memo, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 
@@ -13,9 +13,16 @@ import Button from '@/components/button';
 
 import useDeleteTodo from '@/api/hooks/use-delete-todo';
 import useArchivedTodos from '@/api/hooks/use-archived-todos';
+import useTodos from '@/api/hooks/use-todos';
+
+import { usePaginationStore } from '@/store';
 
 function ArchiveWrapper() {
-  const todosQuery = useArchivedTodos();
+  const paginationStore = usePaginationStore();
+
+  const archiveTodosQuery = useArchivedTodos();
+  const todosQuery = useTodos();
+
   const deleteTodo = useDeleteTodo();
 
   const callbacks = {
@@ -24,8 +31,16 @@ function ArchiveWrapper() {
     },
   };
 
+  useEffect(() => {
+    if (!todosQuery.data?.maxPage) return;
+    if (paginationStore.currentPage > todosQuery.data?.maxPage)
+      paginationStore.setCurrentPage(todosQuery.data.maxPage);
+
+    paginationStore.setMaxPage(todosQuery.data?.maxPage);
+  }, [paginationStore, todosQuery.data?.maxPage]);
+
   const options = {
-    isTodosListExists: Number(todosQuery.data?.length) > 0,
+    isTodosListExists: Number(archiveTodosQuery.data?.length) > 0,
   };
 
   const { t } = useTranslation();
@@ -35,12 +50,12 @@ function ArchiveWrapper() {
       <Section.Title>{t('archiveTitle')}:</Section.Title>
 
       <Section.Content>
-        {todosQuery.isFetching ? (
+        {archiveTodosQuery.isFetching ? (
           <GridSkeleton elemsCount={4} />
         ) : options.isTodosListExists ? (
           <AnimatePresence>
             <Grid
-              data={todosQuery.data!}
+              data={archiveTodosQuery.data!}
               renderItem={(todo) => {
                 return (
                   <motion.div exit={{ opacity: 0, y: 10 }}>
@@ -62,7 +77,7 @@ function ArchiveWrapper() {
             t={t}
             leftActions={
               <>
-                {Object.values(todosQuery.data!).length > 0 && (
+                {Object.values(todosQuery.data?.list || []).length > 0 && (
                   <Link to="/">
                     <Button status="active">{t('anyActions.archiveEntity1')}</Button>
                   </Link>

@@ -9,7 +9,10 @@ type TProps = {
 
 function GridSkeleton({ elemsCount }: TProps) {
   return (
-    <Grid data={new Array(elemsCount).fill(null)} renderItem={() => <Skeleton height={250} />} />
+    <Grid
+      data={new Array(elemsCount).fill(null)}
+      renderItem={() => <Skeleton style={{ zIndex: -1 }} height={250} />}
+    />
   );
 }
 

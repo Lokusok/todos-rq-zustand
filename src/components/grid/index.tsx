@@ -19,6 +19,7 @@ function Grid<T>({ data, renderItem, keyExtractor }: TProps<T>) {
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
             key={keyExtractor?.(item) || index}
+            className={style.gridItem}
           >
             {renderItem(item)}
           </motion.div>

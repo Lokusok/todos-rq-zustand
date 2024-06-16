@@ -11,5 +11,10 @@
 
   @media (max-width: 657px) {
     grid-template-columns: 1fr;
+    row-gap: 30px;
   }
+}
+
+.gridItem {
+  display: grid;
 }

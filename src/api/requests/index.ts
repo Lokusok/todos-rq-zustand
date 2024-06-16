@@ -46,7 +46,7 @@ export const createTodo: (todo: TTodo) => Promise<TTodo> = async (todo: TTodo) =
   state.todos.maxOrder = todo.order;
   state.todos.maxPage = calculateMaxPage(
     Object.values(state.todos.list).length,
-    state.todos.perPage
+    state.todos.perPage,
   );
 
   saveToLocalStorage(state);
@@ -62,6 +62,8 @@ export const addTodoToArchive: (todoId: TTodo['id']) => Promise<TTodo> = async (
 
   saveToLocalStorage(state);
 
+  console.log(state);
+
   return state.todos.list[todoId];
 };
 
@@ -76,12 +78,21 @@ export const removeTodoFromAchive: (todoId: TTodo['id']) => Promise<TTodo> = asy
   return state.todos.list[todoId];
 };
 
+/**
+ * Окончательное удаление (из всех списков)
+ * @returns {Boolean}
+ */
 export const deleteTodo: (todoId: TTodo['id']) => Promise<boolean> = async (todoId) => {
   const rawState = localStorage.getItem(STORAGE_KEY);
   const state: TState = JSON.parse(rawState!);
 
   delete state.todos.list[todoId];
   delete state.todos.archive[todoId];
+
+  state.todos.maxPage = calculateMaxPage(
+    Object.values(state.todos.list).length,
+    state.todos.perPage,
+  );
 
   saveToLocalStorage(state);
 
