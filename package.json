@@ -4,7 +4,6 @@
   "version": "0.0.0",
   "type": "module",
   "scripts": {
-    "start": "concurrently \"npm run dev\" \"npm run api:start\"",
     "dev": "vite",
     "test": "vitest",
     "build": "tsc && vite build",
@@ -27,7 +26,6 @@
     "i18next-browser-languagedetector": "^8.0.0",
     "i18next-http-backend": "^2.5.2",
     "immer": "^10.1.1",
-    "json-server": "^1.0.0-beta.1",
     "lottie-react": "^2.4.0",
     "lucide-react": "^0.394.0",
     "react": "^18.2.0",
@@ -40,7 +38,6 @@
     "react-router-dom": "^6.23.1",
     "recharts": "^2.12.7",
     "sass": "^1.77.4",
-    "storybook-addon-react-router-v6": "^2.0.15",
     "zustand": "^4.5.2"
   },
   "devDependencies": {
@@ -71,6 +68,7 @@
     "eslint-plugin-storybook": "^0.8.0",
     "jsdom": "^24.1.0",
     "storybook": "^8.1.9",
+    "storybook-addon-react-router-v6": "^2.0.15",
     "typescript": "^5.2.2",
     "vite": "^5.2.0",
     "vite-plugin-pwa": "^0.20.0",

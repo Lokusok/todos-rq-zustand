@@ -23,7 +23,7 @@ function NotFound({ t, goToHref, buttonText }: TProps) {
 
       {Boolean(goToHref) && (
         <Link to="/">
-          <Button>{t ? 'notFound.linkBtnText' : buttonText}</Button>
+          <Button>{t ? t('notFound.linkBtnText') : buttonText}</Button>
         </Link>
       )}
     </div>
